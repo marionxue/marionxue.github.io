@@ -6,10 +6,19 @@
     <description>Recent content in Docker on 云原生·生态圈</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.kubemaster.top/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>通过SSH协议与DockerDaemon通信</title>
+      <link>https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/</guid>
+      <description>&lt;p&gt;本文阐述如何通过SSH协议与Docker Daemon通信。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>获取客户端访问真实 IP</title>

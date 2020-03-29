@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+
+  <title>通过SSH协议与DockerDaemon通信-云原生生态圈|Kubernetes|Istio|Prometheus|Python|Golang|云原生|CloudNative</title>
+  <meta property="og:title" content="通过SSH协议与DockerDaemon通信" />
+  <meta name="twitter:title" content="通过SSH协议与DockerDaemon通信" />
+
+  <meta name="description" content="本文阐述如何通过SSH协议与Docker Daemon通信。">
+  <meta property="og:description" content="本文阐述如何通过SSH协议与Docker Daemon通信。">
+  <meta name="twitter:description" content="本文阐述如何通过SSH协议与Docker Daemon通信。">
+  <meta name="author" content=""/>
+  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png"/>
+  <meta property="og:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="云原生·生态圈" />
+
+  <meta name="generator" content="Hugo 0.54.0" />
+  <link rel="canonical" href="https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/" />
+  <link rel="alternate" href="https://www.kubemaster.top/index.xml" type="application/rss+xml" title="云原生·生态圈">
+
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
+  
+
+  <link rel="stylesheet" href='https://www.kubemaster.top/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  
+  
+    
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <![endif]-->
+<meta name="google-site-verification" content="oKxX4fOvB2yYmU02txZFChM93XQbESU4JaG3tNH9Hm8" />
+<meta name="baidu-site-verification" content="F5ojAyqaKU" />
+<meta name="keywords" content="">
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d611849735f187dd788dc054908f7d7a";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-158705628-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://www.kubemaster.top/" title="云原生·生态圈">
+        <img src="https://pic.downk.cc/item/5e6cbaa8e83c3a1e3a364ae6.png" style="margin-top: -5px;height: 32px;" alt="云原生·生态圈">
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="首页" href="https://www.kubemaster.top/">首页</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">文章分类</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.kubemaster.top/archives">Archive</a>
+                
+                  <a href="https://www.kubemaster.top/tags">tags</a>
+                
+                  <a href="https://www.kubemaster.top/tags/kubernetes">kubernetes</a>
+                
+                  <a href="https://www.kubemaster.top/tags/python">python</a>
+                
+                  <a href="https://www.kubemaster.top/tags/django">django</a>
+                
+                  <a href="https://www.kubemaster.top/tags/devops">devops</a>
+                
+                  <a href="https://www.kubemaster.top/tags/golang">go</a>
+                
+                  <a href="https://www.kubemaster.top/tags/docker">docker</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">书籍</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.qikqiak.com/k8s-book/">k8s进阶手册</a>
+                
+                  <a href="https://www.kubemaster.top/istio-book/">一起学istio</a>
+                
+                  <a href="https://www.qikqiak.com/tdd-book/">Python微服务</a>
+                
+                  <a href="https://md.qikqiak.com/">Markdown微信</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="关于" href="https://www.kubemaster.top/page/about/">关于</a>
+            </li>
+          
+        
+
+        
+
+        
+
+        
+          <li>
+            <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" style="outline: none;">
+              <span id="searchGlyph" class="glyphicon glyphicon-search"></span>
+            </a>
+          </li>
+          
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+
+  <div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">搜索</h4>
+        </div>
+        <div class="modal-body">
+            
+<div class="aa-input-container" id="aa-input-container">
+    <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+    <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+        <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+    </svg>
+</div>
+<script src="https://www.kubemaster.top/js/algoliasearch.min.js"></script>
+<script src="https://www.kubemaster.top/js/autocomplete.min.js"></script>
+
+<script>
+var client = algoliasearch("1JDRAS0AZR", "");
+var index = client.initIndex('prod_blog');
+
+autocomplete('#aa-search-input',
+{ hint: false}, {
+    source: autocomplete.sources.hits(index, {hitsPerPage: 5}),
+    
+    displayKey: 'name',
+    
+    templates: {
+        
+        suggestion: function(suggestion) {
+            return '<span>' + '<a href="https://www.kubemaster.top/post/' + suggestion.slug + '">' +
+            suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+  
+  
+  
+
+
+
+
+  
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://www.kubemaster.top/img/posts/18888531_442371539465605_1833253399559143424_n.jpg" data-img-desc-1="乌镇水乡@杭州 JUNE 1,2017"></div>
+  
+
+  <header class="header-section has-img">
+    
+      <div class="intro-header big-img">
+        
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <div class="post-heading">
+                <h1>通过SSH协议与DockerDaemon通信</h1>
+                  
+                  
+                    <span class="post-meta">
+  
+    发表于 March 23, 2020
+  
+  
+</span>
+
+
+                  
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="img-desc" style="display: inline;"></span>
+      </div>
+    
+    
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>通过SSH协议与DockerDaemon通信</h1>
+                
+                
+                  <span class="post-meta">
+  
+    发表于 March 23, 2020
+  
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </header>
+
+
+    
+
+
+
+<div class="container" role="main">
+  <div class="row">
+
+    
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div>
+            
+            
+            <h5 id="tags" style="margin-top: 30px;">标签:
+              
+                  <a href="https://www.kubemaster.top/tags/docker/">docker</a> &nbsp;
+              
+                  <a href="https://www.kubemaster.top/tags/ssh/">ssh</a> &nbsp;
+              
+            </h5>
+            
+        </div>
+  
+        <article role="main" class="blog-post" itemprop="articleBody" id="content">
+          
+            
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#docker的客户端和服务端通信有三种方式">Docker的客户端和服务端通信有三种方式</a></li>
+</ul></li>
+<li><a href="#如何通过ssh协议远程操作docker服务">如何通过ssh协议远程操作Docker服务</a>
+<ul>
+<li><a href="#回顾如何通过tcp-fd-unix远程访问docker">回顾如何通过tcp/fd/unix远程访问Docker</a>
+<ul>
+<li><a href="#h-fd-如何使用">-H fd://如何使用</a></li>
+<li><a href="#h-tcp-ip-port如何使用">-H tcp://ip:port如何使用</a></li>
+<li><a href="#h-unix-如何使用">-H unix:// 如何使用</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+
+          
+  
+          
+          
+          
+  
+          
+          
+          
+  
+          
+          
+          
+
+          <p>本文阐述如何通过SSH协议与Docker Daemon通信。</p>
+
+<p>Docker客户端通常通过Unix套接字在本地与守护程序通信 <code>/var/run/docker.sock</code>，或通过网络通过TCP套接字。 以下是启动时提供给Docker守护程序的选项的典型示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># ssh root@123.57.79.224</span>
+Last login: Mon Mar <span style="color:#bd93f9">23</span> <span style="color:#bd93f9">00</span>:35:48 <span style="color:#bd93f9">2020</span> from <span style="color:#bd93f9">111</span>.199.154.70
+  Welcome to Qiniu Cloud Elastic Compute Service !
+
+<span style="color:#ff79c6">[</span>root@iZ2zebzqqnls3u8zisdw00Z ~<span style="color:#ff79c6">]</span><span style="color:#6272a4"># ps -ef |grep dockerd</span>
+root     <span style="color:#bd93f9">23438</span>     <span style="color:#bd93f9">1</span>  <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">00</span>:41 ?        <span style="color:#bd93f9">00</span>:00:03 /usr/bin/dockerd -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock
+root     <span style="color:#bd93f9">24354</span> <span style="color:#bd93f9">24336</span>  <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">08</span>:15 pts/0    <span style="color:#bd93f9">00</span>:00:00 grep --color<span style="color:#ff79c6">=</span>auto dockerd</code></pre></div>
+<h4 id="docker的客户端和服务端通信有三种方式">Docker的客户端和服务端通信有三种方式</h4>
+
+<ul>
+<li><code>-H unix://</code> 指的是Docker使用本地的unix套接字<code>/var/run/docker.sock</code>进行通信</li>
+<li><code>-H tcp://0.0.0.0:2376</code>使守护程序可以通过端口2376上的任何网络接口使用。需要在安全组中打开此端口（并且，如果可能的话，请将该端口限制为IP地址白名单），以便远程客户端可以访问守护程序，为了安全起见，一般不建议开启。</li>
+<li><code>-H fd://</code> 这是在systemd内部运行Docker是使用的远程通信方式，由systemd创建套接字并激活Docker守护进程。</li>
+</ul>
+
+<h3 id="如何通过ssh协议远程操作docker服务">如何通过ssh协议远程操作Docker服务</h3>
+
+<p>由于SSH被广泛使用，并且通常是默认情况下允许的协议之一，因此直接通过SSH访问Docker守护程序可能很方便。Docker 18.09使这成为可能，下面进行一下。</p>
+
+<ol>
+<li>准备一个安装好版本在18.09或者更新的Docker服务</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -s https://get.docker.com | sh
+systemctl <span style="color:#8be9fd;font-style:italic">enable</span> --now docker.service
+ps -ef |grep dockerd | egrep -v grep
+root     <span style="color:#bd93f9">23438</span>     <span style="color:#bd93f9">1</span>  <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">00</span>:41 ?        <span style="color:#bd93f9">00</span>:00:06 /usr/bin/dockerd -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock</code></pre></div>
+<ol>
+<li>然后创建一个私钥，用于无密访问远程主机</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa</code></pre></div>
+<ol>
+<li>使用Docker -H通过ssh协议操作远程主机上的Docker</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker -H ssh://root@123.57.79.224 run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+<span style="color:#bd93f9">1</span>. The Docker client contacted the Docker daemon.
+<span style="color:#bd93f9">2</span>. The Docker daemon pulled the <span style="color:#f1fa8c">&#34;hello-world&#34;</span> image from the Docker Hub.
+    <span style="color:#ff79c6">(</span>amd64<span style="color:#ff79c6">)</span>
+<span style="color:#bd93f9">3</span>. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+<span style="color:#bd93f9">4</span>. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+$ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+https://hub.docker.com/
+
+For more examples and ideas, visit:
+https://docs.docker.com/get-started/</code></pre></div>
+<p>现在就有了4种远程访问Docker的方式了，但是前面三种你还记得如何使用的吗？</p>
+
+<h4 id="回顾如何通过tcp-fd-unix远程访问docker">回顾如何通过tcp/fd/unix远程访问Docker</h4>
+
+<h5 id="h-fd-如何使用">-H fd://如何使用</h5>
+
+<p>每次安装完Docker服务之后，在systemd文件中都会发现<code>-H fd://</code> 这究竟是什么意思呢？我们是否能通过<code>fd://</code>的方式进行访问docker daemon，测试一下:</p>
+
+<ol>
+<li>先停下Docker服务</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bahs" data-lang="bahs">systemctl stop docker</code></pre></div>
+<ol>
+<li>查看是否有Docker的进程</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># ps aux | grep &#39;docker&#39; | egrep -v grep</span>
+lsof -Ua | grep <span style="color:#f1fa8c">&#39;docker&#39;</span> | egrep -v grep</code></pre></div>
+<ol>
+<li>启动<code>docker.socket</code></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># systemctl start docker.socket</span>
+<span style="color:#6272a4"># ps aux | grep &#39;docker&#39; | egrep -v grep</span>
+<span style="color:#6272a4"># lsof -Ua | grep &#39;docker&#39; | egrep -v grep</span>
+systemd       <span style="color:#bd93f9">1</span>    root   29u  unix 0xffff88022d286800      0t0 <span style="color:#bd93f9">118203</span> /var/run/docker.sock</code></pre></div>
+<p>启动之后<code>docker.socket</code>，我们可以看到仍然没有docker进程在运行，但是套接字<code>/var/run/docker.sock</code>已经创建，它属于该进程<code>systemd</code>,实际上，套接字现在已经准备好接收请求，即使<code>docker</code>尚未运行。systemd将<code>docker.service</code>在第一个请求到来时启动，将已创建的套接字传递给Docker</p>
+
+<ol>
+<li>开始 <code>docker.service</code></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># systemctl start docker.service</span>
+<span style="color:#6272a4"># ps aux | grep &#39;docker&#39; | egrep -v grep</span>
+root     <span style="color:#bd93f9">25748</span>  <span style="color:#bd93f9">3</span>.3  <span style="color:#bd93f9">0</span>.8 <span style="color:#bd93f9">580192</span> <span style="color:#bd93f9">71484</span> ?        Ssl  <span style="color:#bd93f9">09</span>:19   <span style="color:#bd93f9">0</span>:00 /usr/bin/dockerd -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock</code></pre></div>
+<p>Docker现在正在运行.</p>
+
+<ol>
+<li>现在我们将docket.socket和docker.service停止掉,然后手动使用<code>fd://</code>启动docker</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># systemctl stop docker.socket</span>
+<span style="color:#6272a4"># systemctl stop docker.service</span>
+<span style="color:#6272a4"># ps aux | grep &#39;docker&#39; | egrep -v grep</span>
+<span style="color:#6272a4"># lsof -Ua | grep &#39;docker&#39; | egrep -v grep</span>
+<span style="color:#6272a4"># /usr/bin/dockerd -H fd://</span>
+INFO<span style="color:#ff79c6">[</span><span style="color:#bd93f9">2020</span>-03-23T09:21:21.010104928+08:00<span style="color:#ff79c6">]</span> Starting up
+failed to load listeners: no sockets found via socket activation: make sure the service was started by systemd</code></pre></div>
+<p>​       当使用时<code>-H fd://</code>，docker将期望套接字通过其父进程传递，而不是自己创建。由Systemd启动时，        Systemd会执行此工作，但是在终端上手动启动时，您不会执行此工作，因此docker守护进程失败并中止。</p>
+
+<h5 id="h-tcp-ip-port如何使用">-H tcp://ip:port如何使用</h5>
+
+<ol>
+<li>我们查看一下docker.service的位置，然后增加一个tcp访问方式</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># diff /usr/lib/systemd/system/docker.service /usr/lib/systemd/system/docker.service.bak</span>
+14c14
+&lt; <span style="color:#8be9fd;font-style:italic">ExecStart</span><span style="color:#ff79c6">=</span>/usr/bin/dockerd -H tcp://0.0.0.0:8888 -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock
+.&gt; <span style="color:#8be9fd;font-style:italic">ExecStart</span><span style="color:#ff79c6">=</span>/usr/bin/dockerd -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock</code></pre></div>
+<ol>
+<li>重启查看是否添加成功</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">systemctl daemon-reload
+systemctl restart docker.service
+<span style="color:#6272a4"># ps aux | grep &#39;docker&#39; | egrep -v grep</span>
+root     <span style="color:#bd93f9">26277</span>  <span style="color:#bd93f9">0</span>.7  <span style="color:#bd93f9">0</span>.8 <span style="color:#bd93f9">449120</span> <span style="color:#bd93f9">69460</span> ?        Ssl  <span style="color:#bd93f9">09</span>:29   <span style="color:#bd93f9">0</span>:00 /usr/bin/dockerd -H tcp://0.0.0.0:8888 -H fd:// --containerd<span style="color:#ff79c6">=</span>/run/containerd/containerd.sock</code></pre></div>
+<ol>
+<li>在添加成功之后，我们在通过tcp和fd的方式远程尝试一下：</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># docker -H fd://192.168.0.230:8888 ps</span>
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+<span style="color:#6272a4"># docker -H tcp://192.168.0.230:8888 ps</span>
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</code></pre></div>
+<ol>
+<li><p>所以你明白了吗？但是为了安全起见，不建议开启docker的tcp端口，或者对Docker远程访问开启证书安全访问，不然你会摊上事儿的。</p></li>
+
+<li><p>然后我们在恢复一下现场。😆</p></li>
+</ol>
+
+<h5 id="h-unix-如何使用">-H unix:// 如何使用</h5>
+
+<ol>
+<li>首先准备一个nginx镜像</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker pull nginx</code></pre></div>
+<ol>
+<li>使用unix套接字创建一个nginx容器</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># curl -XPOST --unix-socket /var/run/docker.sock -d &#39;{&#34;Image&#34;:&#34;nginx&#34;}&#39; -H &#39;Content-Type: application/json&#39; http://localhost/containers/create</span>
+<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;Id&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;Warnings&#34;</span>:<span style="color:#ff79c6">[]}</span></code></pre></div>
+<ol>
+<li>通过返回的容器ID，启动该容器</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de/start</span>
+<span style="color:#6272a4"># docker ps -a</span>
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS               NAMES
+c4a739ff6d6b        nginx               <span style="color:#f1fa8c">&#34;nginx -g &#39;daemon of…&#34;</span>   About a minute ago   Up <span style="color:#bd93f9">13</span> seconds       <span style="color:#bd93f9">80</span>/tcp              reverent_edison</code></pre></div>
+<ol>
+<li>我们也可以通过unix套接字监听Docker的事件:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># curl --unix-socket /var/run/docker.sock http://localhost/events</span>
+<span style="color:#f1fa8c">&#34;status&#34;</span>:<span style="color:#f1fa8c">&#34;create&#34;</span>,<span style="color:#f1fa8c">&#34;id&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;from&#34;</span>:<span style="color:#f1fa8c">&#34;nginx&#34;</span>,<span style="color:#f1fa8c">&#34;Type&#34;</span>:<span style="color:#f1fa8c">&#34;container&#34;</span>,<span style="color:#f1fa8c">&#34;Action&#34;</span>:<span style="color:#f1fa8c">&#34;create&#34;</span>,<span style="color:#f1fa8c">&#34;Actor&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;ID&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;Attributes&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;image&#34;</span>:<span style="color:#f1fa8c">&#34;nginx&#34;</span>,<span style="color:#f1fa8c">&#34;maintainer&#34;</span>:<span style="color:#f1fa8c">&#34;NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e&#34;</span>,<span style="color:#f1fa8c">&#34;name&#34;</span>:<span style="color:#f1fa8c">&#34;reverent_edison&#34;</span><span style="color:#ff79c6">}}</span>,<span style="color:#f1fa8c">&#34;scope&#34;</span>:<span style="color:#f1fa8c">&#34;local&#34;</span>,<span style="color:#f1fa8c">&#34;time&#34;</span>:1584924907,<span style="color:#f1fa8c">&#34;timeNano&#34;</span>:1584924907738224502<span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;Type&#34;</span>:<span style="color:#f1fa8c">&#34;network&#34;</span>,<span style="color:#f1fa8c">&#34;Action&#34;</span>:<span style="color:#f1fa8c">&#34;connect&#34;</span>,<span style="color:#f1fa8c">&#34;Actor&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;ID&#34;</span>:<span style="color:#f1fa8c">&#34;8ca197c838f66decc5fc79996f78021597d928a26c0d011984416a6c9616a315&#34;</span>,<span style="color:#f1fa8c">&#34;Attributes&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;container&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;name&#34;</span>:<span style="color:#f1fa8c">&#34;bridge&#34;</span>,<span style="color:#f1fa8c">&#34;type&#34;</span>:<span style="color:#f1fa8c">&#34;bridge&#34;</span><span style="color:#ff79c6">}}</span>,<span style="color:#f1fa8c">&#34;scope&#34;</span>:<span style="color:#f1fa8c">&#34;local&#34;</span>,<span style="color:#f1fa8c">&#34;time&#34;</span>:1584924984,<span style="color:#f1fa8c">&#34;timeNano&#34;</span>:1584924984914048199<span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;status&#34;</span>:<span style="color:#f1fa8c">&#34;start&#34;</span>,<span style="color:#f1fa8c">&#34;id&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;from&#34;</span>:<span style="color:#f1fa8c">&#34;nginx&#34;</span>,<span style="color:#f1fa8c">&#34;Type&#34;</span>:<span style="color:#f1fa8c">&#34;container&#34;</span>,<span style="color:#f1fa8c">&#34;Action&#34;</span>:<span style="color:#f1fa8c">&#34;start&#34;</span>,<span style="color:#f1fa8c">&#34;Actor&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;ID&#34;</span>:<span style="color:#f1fa8c">&#34;c4a739ff6d6ba66e80be9a669aa9ce7cf0044b524e0606433e09810b4cc084de&#34;</span>,<span style="color:#f1fa8c">&#34;Attributes&#34;</span>:<span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;image&#34;</span>:<span style="color:#f1fa8c">&#34;nginx&#34;</span>,<span style="color:#f1fa8c">&#34;maintainer&#34;</span>:<span style="color:#f1fa8c">&#34;NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e&#34;</span>,<span style="color:#f1fa8c">&#34;name&#34;</span>:<span style="color:#f1fa8c">&#34;reverent_edison&#34;</span><span style="color:#ff79c6">}}</span>,<span style="color:#f1fa8c">&#34;scope&#34;</span>:<span style="color:#f1fa8c">&#34;local&#34;</span>,<span style="color:#f1fa8c">&#34;time&#34;</span>:1584924985,<span style="color:#f1fa8c">&#34;timeNano&#34;</span>:1584924985130585919<span style="color:#ff79c6">}</span></code></pre></div>
+<p>好了。万字长文书写到此，你学到了吗？</p>
+
+          
+<h2>微信公众号</h2>
+<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
+<img src="https://pic.downk.cc/item/5e6cce51e83c3a1e3a41b83f.png" alt="wechat-account-qrcode">
+
+  
+          
+            <div class="entry-shang text-center">
+    <p>「真诚赞赏，手留余香」</p>
+    <button class="zs show-zs btn btn-bred">赞赏</button>
+</div>
+<div class="zs-modal-bg"></div>
+<div class="zs-modal-box">
+    <div class="zs-modal-head">
+        <button type="button" class="close">×</button>
+        <span class="author"><img src="https://www.kubemaster.top/img/wechat-logo.jpeg"/>Marion</span>
+        <p class="tip"><i></i><span>请我喝杯咖啡？</span></p>
+    </div>
+    <div class="zs-modal-body">
+        <div class="zs-modal-btns">
+            <button class="btn btn-blink" data-num="2">2元</button>
+            <button class="btn btn-blink" data-num="5">5元</button>
+            <button class="btn btn-blink" data-num="10">10元</button>
+            <button class="btn btn-blink" data-num="50">50元</button>
+            <button class="btn btn-blink" data-num="100">100元</button>
+            <button class="btn btn-blink" data-num="1">任意金额</button>
+        </div>
+        <div class="zs-modal-pay">
+            <button class="btn btn-bred" id="pay-text">2元</button>
+            <p>使用<span id="pay-type">微信</span>扫描二维码完成支付</p>
+            <img src="https://www.kubemaster.top/img/wechatcn-btn.png" id="pay-image"/>
+        </div>
+    </div>
+    <div class="zs-modal-footer">
+        <span class="zs-wechat"><img src="https://www.kubemaster.top/img/wechat-btn.png"/></span>
+    </div>
+</div>
+          
+          
+            
+<div class="social-share" data-initialized="true" style="margin-bottom: 20px;margin-top:20px;">
+    <center>
+    <a href="#" class="social-share-icon icon-weibo"></a>
+    <a href="#" class="social-share-icon icon-wechat"></a>
+    <a href="#" class="social-share-icon icon-twitter"></a>
+    <a href="#" class="social-share-icon icon-linkedin"></a>
+    <a href="#" class="social-share-icon icon-facebook"></a>
+    <a href="#" class="social-share-icon icon-qq"></a>
+    <a href="#" class="social-share-icon icon-qzone"></a>
+    </center>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+          
+        </article>
+  
+        
+          
+
+<h3>相关文章</h3>
+<ul style="margin-bottom: 25px;">
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app-part2/">TDD开发容器化的Python微服务应用(二)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app/">TDD开发容器化的Python微服务应用(一)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/awk-advance-turtorial/">Awk权威指南</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/upgrading-django-20-10-tips/">更新django2.0的10条注意事项</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/webpack3-get-started/">webpack3入门到放肆视频教程</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/a-better-git-log/">更优雅的git log</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/python-convert-pdf-images/">利用Python 优雅的将PDF 转换成图片</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/make-https-blog/">给博客加上HTTPS</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/django-staticroot-staticfilesdirs-function/">Django 中STATIC_ROOT 与STATICFILES_DIRS的区别</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/django-decorator-usage/">Python装饰器简介</a></li>
+    
+</ul>
+
+        
+  
+        
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://www.kubemaster.top/post/awk-advance-turtorial/" data-toggle="tooltip" data-placement="top" title="Awk权威指南">&larr; 前一篇</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://www.kubemaster.top/post/devops-interview-questions-33/" data-toggle="tooltip" data-placement="top" title="DevOps工程师面试33问">后一篇 &rarr;</a>
+            </li>
+          
+        </ul>
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-5376999672787220"
+            data-ad-slot="3700507799"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+  
+        
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    var gitalk = new Gitalk({
+        clientID: 'bdb76dbb2e9d0786e350',
+        clientSecret: 'b454b2a08013fd0e32013be7a63fa8fcb262b6c4',
+        repo: 'blog',
+        owner: 'cnych',
+        admin: ['cnych'],
+        labels: ['gitment'],
+        title: '通过SSH协议与DockerDaemon通信',
+        createIssueManually: true,
+        id: 'remote-communication-docker-daemon-by-ssh-protocal',      
+        distractionFreeMode: true  
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+  
+      </div>
+    
+    
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          <img src="https://pic.downk.cc/item/5e6cc64de83c3a1e3a3e5ea1.jpg" alt="云原生生态圈">
+          
+              <li>
+                <a href="mailto:icnych@gmail.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://github.com/cnych" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://weibo.com/cnych" title="微博">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://instagram.com/cnych" title="Instagram">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          
+          <li>
+            <a href="https://www.kubemaster.top/index.xml" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/">云原生·生态圈</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/sitemap.xml">网站地图</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/archive/">归档</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/friend/">友链</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MTQzNjQ5Ng==#wechat_redirect" target="_blank">公众号历史文章</a>
+            
+          
+        </p>
+        <p class="text-center text-muted">
+          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+          <span id="busuanzi_container_site_pv" style="display:none">
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次
+          </span>
+          &nbsp;&bull;&nbsp;
+          <span id="busuanzi_container_site_uv" style="display:none">
+            访客数<span id="busuanzi_value_site_uv"></span>人次
+          </span>
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          由 <a href="http://gohugo.io">Hugo v0.54.0</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/marionxue/marionxue.github.io">云原生生态圈</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src='https://www.kubemaster.top/js/bundle.min.76b616091e53a94d6909ba0a295da18780df89e8a2ac90870d207a478c15af42.js' integrity='sha256-drYWCR5TqU1pCboKKV2hh4DfieiirJCHDSB6R4wVr0I='></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158705628-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-158705628-1');
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script >
+$(document).ready(function() {
+  var int = setInterval(fixCount, 50);  
+  
+  var initPVCount = 584976;
+  var initUVCount = 153191;
+  function fixCount() {                   
+    if ($("#busuanzi_container_site_pv").css("display") != "none") {
+        $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + initPVCount); 
+        clearInterval(int); 
+    }
+    if ($("#busuanzi_container_site_uv").css("display") != "none") {
+      $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + initUVCount);
+      clearInterval(int); 
+    }  
+  }           
+});
+</script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+$('.carousel').slick({
+    dots: true,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    cssEase: 'linear',
+    centerMode: true,
+    prevArrow: '<button type="button" class="slick-prev"></button>',
+    nextArrow: '<button type="button" class="slick-next"></button>',
+});
+</script>
+
+  </body>
+</html>
+

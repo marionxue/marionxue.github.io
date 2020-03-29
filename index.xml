@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>通过SSH协议与DockerDaemon通信</title>
+      <link>https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/</guid>
+      <description>&lt;p&gt;本文阐述如何通过SSH协议与Docker Daemon通信。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Awk权威指南</title>
       <link>https://www.kubemaster.top/post/awk-advance-turtorial/</link>
       <pubDate>Sat, 14 Mar 2020 00:00:00 +0000</pubDate>

@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>https://www.kubemaster.top/post/remote-communication-docker-daemon-by-ssh-protocal/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.kubemaster.top/post/awk-advance-turtorial/</loc>
     <lastmod>2020-03-14T00:00:00+00:00</lastmod>
   </url>
@@ -1127,7 +1132,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/tags/docker/</loc>
-    <lastmod>2020-03-03T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1753,6 +1758,12 @@
   <url>
     <loc>https://www.kubemaster.top/tags/spinnaker/</loc>
     <lastmod>2020-02-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.kubemaster.top/tags/ssh/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
