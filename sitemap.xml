@@ -3,18 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://www.kubemaster.top/post/awk-advance-turtorial/</loc>
-    <lastmod>2020-03-14T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://www.kubemaster.top/post/devops-base-on-jenkins/</loc>
-    <lastmod>2020-01-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://www.kubemaster.top/post/devops-interview-questions-33/</loc>
     <lastmod>2020-03-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.kubemaster.top/post/awk-advance-turtorial/</loc>
+    <lastmod>2020-03-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -60,6 +55,11 @@
   <url>
     <loc>https://www.kubemaster.top/post/custom-traefik2-middleware/</loc>
     <lastmod>2020-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.kubemaster.top/post/devops-base-on-jenkins/</loc>
+    <lastmod>2020-01-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -1091,7 +1091,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/tags/devops/</loc>
-    <lastmod>2020-01-13T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1331,7 +1331,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/tags/jenkins/</loc>
-    <lastmod>2020-01-13T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1403,7 +1403,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/tags/kubernetes/</loc>
-    <lastmod>2020-01-13T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1602,7 +1602,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/post/</loc>
-    <lastmod>2020-03-14T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1872,7 +1872,7 @@
   
   <url>
     <loc>https://www.kubemaster.top/</loc>
-    <lastmod>2020-03-14T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

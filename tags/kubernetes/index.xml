@@ -6,19 +6,10 @@
     <description>Recent content in Kubernetes on 云原生·生态圈</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.kubemaster.top/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>基于 Jenkins 的 DevOps 流水线实践</title>
-      <link>https://www.kubemaster.top/post/devops-base-on-jenkins/</link>
-      <pubDate>Mon, 13 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.kubemaster.top/post/devops-base-on-jenkins/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://www.kubemaster.top/post/devops-base-on-jenkins/&#34;&gt;&lt;img src=&#34;https://sdn.youdianzhishi.com/images/2020/3/7/9461711bff5a4f5b999ebcc0f65bb12b.jpg?imageView2/2/format/webp&#34; alt=&#34;devops jenkins&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>带时光机的 Kubernetes Dashboard - Kubevious</title>
@@ -85,6 +76,15 @@
       
       <guid>https://www.kubemaster.top/post/custom-traefik2-middleware/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://www.kubemaster.top/tags/traefik/&#34;&gt;Traefik 2.X&lt;/a&gt; 版本发布以来受到了很大的关注，特别是提供的中间件机制非常受欢迎，但是目前对于用户来说能使用的也只有官方提供的中间件，这对于某些特殊场景可能就满足不了需求了，自然而然就想到了自定义中间件，然而现在要想自定义中间件不是一件容易的事情，虽然实现一个中间件很简单，因为目前官方没有提供方法可以将我们自定义的中间件配置到 Traefik 中，所以只能采用比较 low 的一种方法，那就是直接更改官方的源代码了，下面我们以一个简单的示例来说明下如何自定义一个 Traefik 中间件。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>基于 Jenkins 的 DevOps 流水线实践</title>
+      <link>https://www.kubemaster.top/post/devops-base-on-jenkins/</link>
+      <pubDate>Mon, 13 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.kubemaster.top/post/devops-base-on-jenkins/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://www.kubemaster.top/post/devops-base-on-jenkins/&#34;&gt;&lt;img src=&#34;https://sdn.youdianzhishi.com/images/2020/3/7/9461711bff5a4f5b999ebcc0f65bb12b.jpg?imageView2/2/format/webp&#34; alt=&#34;devops jenkins&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
