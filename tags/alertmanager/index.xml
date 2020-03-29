@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alertmanager on 云原生生态圈</title>
+    <link>https://www.kubemaster.top/tags/alertmanager/</link>
+    <description>Recent content in Alertmanager on 云原生生态圈</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.kubemaster.top/tags/alertmanager/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Prometheus Operator 自定义报警</title>
+      <link>https://www.kubemaster.top/post/prometheus-operator-custom-alert/</link>
+      <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.kubemaster.top/post/prometheus-operator-custom-alert/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://www.qikqiak.com/post/prometheus-operator-monitor-etcd&#34;&gt;上篇文章我们介绍了如何自定义一个 ServiceMonitor 对象&lt;/a&gt;，但是如果需要自定义一个报警规则的话呢？又该怎么去做呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Prometheus报警AlertManager实战</title>
+      <link>https://www.kubemaster.top/post/alertmanager-of-prometheus-in-practice/</link>
+      <pubDate>Wed, 27 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.kubemaster.top/post/alertmanager-of-prometheus-in-practice/</guid>
+      <description>&lt;p&gt;在前面一文&lt;a href=&#34;https://www.kubemaster.top/post/kubernetes-monitor-prometheus-grafana/&#34;&gt;Kubernetes使用Prometheus搭建监控平台&lt;/a&gt;中我们知道了怎么使用&lt;code&gt;Prometheus&lt;/code&gt;来搭建监控平台，也了解了&lt;code&gt;grafana&lt;/code&gt;的使用。这篇文章就来说说报警系统的搭建，有人说报警用&lt;code&gt;grafana&lt;/code&gt;就行了，实际上&lt;code&gt;grafana&lt;/code&gt;对报警的支持真的很弱，而&lt;code&gt;Prometheus&lt;/code&gt;提供的报警系统就强大很多，今天我们的主角就是&lt;code&gt;AlertManager&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

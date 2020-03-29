@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+
+  <title>Awk权威指南-云原生生态圈|Kubernetes|Istio|Prometheus|Python|Golang|云原生|CloudNative</title>
+  <meta property="og:title" content="Awk权威指南" />
+  <meta name="twitter:title" content="Awk权威指南" />
+
+  <meta name="description" content="
+这是awk编程指南的最佳实践，也是技术人员的装逼必备技能!!!">
+  <meta property="og:description" content="
+这是awk编程指南的最佳实践，也是技术人员的装逼必备技能!!!">
+  <meta name="twitter:description" content="
+这是awk编程指南的最佳实践，也是技术人员的装逼必备技能!!!">
+  <meta name="author" content=""/>
+  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png"/>
+  <meta property="og:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://www.kubemaster.top/post/awk-advance-turtorial/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="云原生生态圈" />
+
+  <meta name="generator" content="Hugo 0.54.0" />
+  <link rel="canonical" href="https://www.kubemaster.top/post/awk-advance-turtorial/" />
+  <link rel="alternate" href="https://www.kubemaster.top/index.xml" type="application/rss+xml" title="云原生生态圈">
+
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
+  
+
+  <link rel="stylesheet" href='https://www.kubemaster.top/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  
+  
+    
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <![endif]-->
+<meta name="google-site-verification" content="oKxX4fOvB2yYmU02txZFChM93XQbESU4JaG3tNH9Hm8" />
+<meta name="baidu-site-verification" content="F5ojAyqaKU" />
+<meta name="keywords" content="">
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d611849735f187dd788dc054908f7d7a";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-158705628-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://www.kubemaster.top/" title="云原生生态圈">
+        <img src="https://pic.downk.cc/item/5e6cbaa8e83c3a1e3a364ae6.png" style="margin-top: -5px;height: 32px;" alt="云原生生态圈">
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="首页" href="https://www.kubemaster.top/">首页</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">文章分类</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.kubemaster.top/archives">Archive</a>
+                
+                  <a href="https://www.kubemaster.top/tags">tags</a>
+                
+                  <a href="https://www.kubemaster.top/tags/kubernetes">kubernetes</a>
+                
+                  <a href="https://www.kubemaster.top/tags/python">python</a>
+                
+                  <a href="https://www.kubemaster.top/tags/django">django</a>
+                
+                  <a href="https://www.kubemaster.top/tags/devops">devops</a>
+                
+                  <a href="https://www.kubemaster.top/tags/golang">go</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">书籍</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.qikqiak.com/k8s-book/">k8s进阶手册</a>
+                
+                  <a href="https://www.kubemaster.top/istio-book/">一起学istio</a>
+                
+                  <a href="https://www.qikqiak.com/tdd-book/">Python微服务</a>
+                
+                  <a href="https://md.qikqiak.com/">Markdown微信</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="关于" href="https://www.kubemaster.top/page/about/">关于</a>
+            </li>
+          
+        
+
+        
+
+        
+
+        
+          <li>
+            <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" style="outline: none;">
+              <span id="searchGlyph" class="glyphicon glyphicon-search"></span>
+            </a>
+          </li>
+          
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+
+  <div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">搜索</h4>
+        </div>
+        <div class="modal-body">
+            
+<div class="aa-input-container" id="aa-input-container">
+    <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+    <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+        <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+    </svg>
+</div>
+<script src="https://www.kubemaster.top/js/algoliasearch.min.js"></script>
+<script src="https://www.kubemaster.top/js/autocomplete.min.js"></script>
+
+<script>
+var client = algoliasearch("1JDRAS0AZR", "");
+var index = client.initIndex('prod_blog');
+
+autocomplete('#aa-search-input',
+{ hint: false}, {
+    source: autocomplete.sources.hits(index, {hitsPerPage: 5}),
+    
+    displayKey: 'name',
+    
+    templates: {
+        
+        suggestion: function(suggestion) {
+            return '<span>' + '<a href="https://www.kubemaster.top/post/' + suggestion.slug + '">' +
+            suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Awk权威指南</h1>
+                
+                
+                  <span class="post-meta">
+  
+    发表于 March 14, 2020
+  
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </header>
+
+
+    
+
+
+
+<div class="container" role="main">
+  <div class="row">
+
+    
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div>
+            
+            
+            <h5 id="tags" style="margin-top: 30px;">标签:
+              
+                  <a href="https://www.kubemaster.top/tags/ops/">ops</a> &nbsp;
+              
+                  <a href="https://www.kubemaster.top/tags/linux/">linux</a> &nbsp;
+              
+                  <a href="https://www.kubemaster.top/tags/awk/">awk</a> &nbsp;
+              
+            </h5>
+            
+        </div>
+  
+        <article role="main" class="blog-post" itemprop="articleBody" id="content">
+          
+            
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#gawk选项">gawk选项</a></li>
+<li><a href="#gawk数据字段变量">gawk数据字段变量</a></li>
+<li><a href="#标准的awk变量">标准的AWK变量</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#awk有效索引长度为0到argc-1">awk有效索引长度为0到argc-1</a>
+<ul>
+<li>
+<ul>
+<li><a href="#操作运算符">操作运算符</a></li>
+<li><a href="#正则表达式">正则表达式</a></li>
+<li><a href="#数组">数组</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#格式-array-0-0-100-此时数组的索引值就是-0-0-是一个字符串">格式: array[&ldquo;0,0&rdquo;] = 100 # 此时数组的索引值就是&rdquo;0,0&rdquo;,是一个字符串</a></li>
+<li><a href="#print-array-elements">print array elements</a>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#一个简单的案例">一个简单的案例</a></li>
+</ul></li>
+<li><a href="#awk中的循环">awk中的循环</a>
+<ul>
+<li><a href="#for">FOR</a></li>
+<li><a href="#while">while</a></li>
+<li><a href="#do-while">DO-WHILE</a></li>
+<li><a href="#break">break</a></li>
+<li><a href="#continue">continue</a></li>
+<li><a href="#exit">EXIT</a></li>
+</ul></li>
+<li><a href="#内置函数">内置函数</a>
+<ul>
+<li><a href="#算术函数">算术函数</a></li>
+<li><a href="#字符串函数">字符串函数</a></li>
+<li><a href="#时间函数">时间函数</a></li>
+<li><a href="#位操作函数">位操作函数</a></li>
+<li><a href="#其他函数">其他函数</a></li>
+</ul></li>
+<li><a href="#输出重定向">输出重定向</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+
+          
+  
+          
+          
+          
+  
+          
+          
+          
+  
+          
+          
+          
+
+          <p><img src="https://pic.downk.cc/item/5e6cda41e83c3a1e3a471b5e.png" alt="awk-advance" />
+这是awk编程指南的最佳实践，也是技术人员的装逼必备技能!!!</p>
+
+<p>AWK 是一种解释执行的编程语言。它非常的强大，被设计用来专门处理文本数据。AWK 的名称是由它们设计者 的名字缩写而来 —— Afred Aho, Peter Weinberger 与 Brian Kernighan</p>
+
+<p>学习awk能帮你处理哪些问题:
+- 文本处理，
+- 生成格式化的文本报告，
+- 进行算术运算，
+- 字符串操作，以及其它更多&hellip;</p>
+
+<blockquote>
+<p>下面我们开始系统的学习一下awk</p>
+</blockquote>
+
+<h3 id="gawk选项">gawk选项</h3>
+
+<ul>
+<li>-F 指定行中分隔数据字段的字段分隔符 <code>awk -F':' '{print $1}' /etc/passwd</code></li>
+<li>-f 指定处理程序的脚本名 <code>awk -f ./passwd.awk /etc/passwd</code></li>
+<li>-v var=value 定义gawk程序中的变量
+<code>bash
+root@awk-pratics:~/workspace# awk -v name=marionxue 'BEGIN{printf &quot;Name=%s\n&quot;,name}'
+Name=marionxue
+</code></li>
+<li>-mf N 指定处理数据文件中的最大行数</li>
+<li>-mr N 指定数据文件的最大数据行数</li>
+</ul>
+
+<h3 id="gawk数据字段变量">gawk数据字段变量</h3>
+
+<ul>
+<li>$0 表示整个文本行</li>
+<li>$1 表示整个文本行中第一个数据字段</li>
+<li>$2 表示整个文本行中第二个数据字段</li>
+</ul>
+
+<p>从上面的部分代码是不是有些很那理解？下面我们会慢慢的带你走进awk，并且使用awk真正的处理一些问题:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# cat marks.txt
+<span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> Amit 物理 <span style="color:#bd93f9">80</span>
+<span style="color:#bd93f9">2</span><span style="color:#ff79c6">)</span> Rahul 数学 <span style="color:#bd93f9">90</span>
+<span style="color:#bd93f9">3</span><span style="color:#ff79c6">)</span> Shyam 生物 <span style="color:#bd93f9">87</span>
+<span style="color:#bd93f9">4</span><span style="color:#ff79c6">)</span> Kerda 英语 <span style="color:#bd93f9">85</span>
+<span style="color:#bd93f9">5</span><span style="color:#ff79c6">)</span> Hari 历史 <span style="color:#bd93f9">89</span>
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;{print $3 &#34;\t&#34; $4}&#39;</span> marks.txt <span style="color:#6272a4">#打印第三列和第四列</span>
+物理  <span style="color:#bd93f9">80</span>
+数学  <span style="color:#bd93f9">90</span>
+生物  <span style="color:#bd93f9">87</span>
+英语  <span style="color:#bd93f9">85</span>
+历史  <span style="color:#bd93f9">89</span>
+
+<span style="color:#6272a4"># 通过模式匹配输出列,注意此处的输出顺序可以调整</span>
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;/a/ {print $3 &#34;\t&#34; $4}&#39;</span> marks.txt
+数学  <span style="color:#bd93f9">90</span>
+生物  <span style="color:#bd93f9">87</span>
+英语  <span style="color:#bd93f9">85</span>
+历史  <span style="color:#bd93f9">89</span></code></pre></div>
+<p>下面我们准备一些小案例
+- 统计匹配到的行数,不需要提前声明这个变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;/a/{++cnt} END {print &#34;Count=&#34;,cnt}&#39;</span> marks.txt
+<span style="color:#8be9fd;font-style:italic">Count</span><span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span></code></pre></div>
+<ul>
+<li>输出字符数多于15的行
+<code>bash
+root@awk-pratics:~/workspace# awk '{print $3 &quot;,&quot; &quot;Length=&quot;,length($0)}' marks.txt
+物理,Length= 14
+数学,Length= 15             # length是awk中内置的函数
+生物,Length= 15
+英语,Length= 16
+历史,Length= 14
+root@awk-pratics:~/workspace# awk 'length($0)&gt;15' marks.txt
+4)  Kaerda 英语 85
+</code></li>
+</ul>
+
+<h3 id="标准的awk变量">标准的AWK变量</h3>
+
+<ul>
+<li>ARGC
+```BASH
+root@awk-pratics:~/workspace# awk &lsquo;BEGIN{print &ldquo;Arguments=&rdquo;,ARGC}&rsquo; One Two Three Four
+Arguments= 5</li>
+</ul>
+
+<h1 id="awk有效索引长度为0到argc-1">awk有效索引长度为0到argc-1</h1>
+
+<p>root@awk-pratics:~/workspace# awk &lsquo;BEGIN{for(i=0;i&lt; ARGC-1;++i)
+{printf &ldquo;ARGV[%d]=%s\n&rdquo;,i,ARGV[i]}
+}&rsquo; one two three four
+ARGV[0]=awk
+ARGV[1]=one
+ARGV[2]=two
+ARGV[3]=three</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">- ENVIRON
+```BASH
+root@awk-pratics:~/workspace# awk &#39;BEGIN{print ENVIRON[&#34;USER&#34;]}&#39; # 从env命令结果中获取的变量值
+root</pre></div>
+<ul>
+<li><p>FILENAME</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;END{print FILENAME}&#39;</span> marks.txt  <span style="color:#6272a4">#注意FILENAME变量只在END块中</span>
+marks.txt</code></pre></div></li>
+
+<li><p>$n 表示输入变量的第几个域</p></li>
+
+<li><p>ARGIND 此变量表示awk正在处理的ARGV数组的索引值</p></li>
+
+<li><p>TEXTDOMAIN 此变量表示 AWK 程序当前文本域。 它主要用寻找程序中的字符串的本地翻译，用于程序的国际化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN{print TEXTDOMAIN}&#39;</span>
+messages <span style="color:#6272a4"># 输出 message 是由于 TEXTDOMAIN 的默认值为 messages) 上面所有的输出都是英文字符是因 为本地语言环境配置为 en_IN</span></code></pre></div></li>
+
+<li><p>PROCINFO 这是一个关联数组变量，它保存了进程相关的信息。比如， 真正的和有效的 UID 值，进程 ID 值等等</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { print PROCINFO[&#34;pid&#34;] }&#39;</span>
+<span style="color:#bd93f9">6172</span></code></pre></div></li>
+
+<li><p>IGNORECASE 忽略大小写</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN{IGNORECASE=1} /amit/&#39;</span> marks.txt
+<span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span>  Amit 物理 <span style="color:#bd93f9">80</span></code></pre></div></li>
+
+<li><p>FIELDWIDTHS 设置宽度</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;12334344343434&#34;</span> | awk -vFIELDWIDTHS<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;1 2 3 4 5&#34;</span> -vOFS<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;|&#34;</span> <span style="color:#f1fa8c">&#39;NF=NF&#39;</span>
+<span style="color:#bd93f9">1</span>|<span style="color:#bd93f9">23</span>|<span style="color:#bd93f9">343</span>|<span style="color:#bd93f9">4434</span>|<span style="color:#bd93f9">3434</span></code></pre></div></li>
+</ul>
+
+<h3 id="操作运算符">操作运算符</h3>
+
+<ul>
+<li>除法运算符
+<code>bash
+awk 'BEGIN { a = 50; b = 20; print &quot;(a % b) = &quot;, (a % b) }'
+root@awk-pratics:~/workspace# echo &quot;121212&quot; | awk 'BEGIN{a=50;b=20;print &quot;(a/b)=&quot;,(a/b)} {print $1}'
+(a/b)= 2.5
+121212
+</code></li>
+<li>前置递增与递减运算符
+<code>bash
+root@awk-pratics:~/workspace# awk 'BEGIN { a = 10; b = ++a; printf &quot;a = %d, b = %d\n&quot;, a, b }'
+a = 11, b = 11
+root@awk-pratics:~/workspace# awk 'BEGIN { a = 10; b = --a; printf &quot;a = %d, b = %d\n&quot;, a, b }'
+a = 9, b = 9
+</code></li>
+<li>后置运算符
+<code>bash
+root@awk-pratics:~/workspace# awk 'BEGIN { a = 10; b = a--; printf &quot;a = %d, b = %d\n&quot;, a, b }'
+a = 9, b = 10
+root@awk-pratics:~/workspace# awk 'BEGIN { a = 10; b = a++; printf &quot;a = %d, b = %d\n&quot;, a, b }'
+a = 11, b = 10
+</code></li>
+
+<li><p>简单赋值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { name = &#34;Jerry&#34;; print &#34;My name is&#34;, name }&#39;</span>
+My name is Jerry</code></pre></div></li>
+
+<li><p>加法赋值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=10; cnt += 10; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span></code></pre></div></li>
+
+<li><p>减法赋值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=10; cnt -= 10; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span></code></pre></div></li>
+
+<li><p>乘除法运算</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=100; cnt /= 5; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span>
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=10; cnt *= 10; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span></code></pre></div></li>
+
+<li><p>模运算符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=100; cnt %= 8; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span></code></pre></div></li>
+
+<li><p>指数运算符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { cnt=2; cnt ^= 4; print &#34;Counter =&#34;, cnt }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Counter</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span></code></pre></div></li>
+
+<li><p>关系运算符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 10; if (a == b) print &#34;a == b&#34; }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">a</span> <span style="color:#ff79c6">==</span> b
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 20; if (a != b) print &#34;a == b&#34; }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">a</span> <span style="color:#ff79c6">==</span> b
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 20; if (a &lt; b) print &#34;a == b&#34; }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">a</span> <span style="color:#ff79c6">==</span> b
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 20; if (a &gt; b) print &#34;a == b&#34; }&#39;</span>
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 10; if (a &lt;= b) print &#34;a &lt;= b&#34; }&#39;</span>
+a &lt;<span style="color:#ff79c6">=</span> b
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 20; if (b &gt; a ) print &#34;b &gt; a&#34; }&#39;</span>
+b &gt; a
+root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 10; if (a &gt;= b) print &#34;a &gt;= b&#34; }&#39;</span>
+a &gt;<span style="color:#ff79c6">=</span> b</code></pre></div></li>
+
+<li><p>逻辑与或非</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 如果 expr1 与 epxr2 均为真，则最终结果为真;否则为假。请注意，只有当 expr1 为真时才会计算 expr2 的 值，若 expr1 为假则直接返回真，而不再计算 expr2 的值。下面的例子判断给定的字符串是否是十进制形 式:</span>
+➜  ~ <span style="color:#ff79c6">(</span>☸ kubernetes-admin@kubernetes:default<span style="color:#ff79c6">)</span> awk <span style="color:#f1fa8c">&#39;BEGIN {num = 5; if (num &gt;= 0 &amp;&amp; num &lt;= 7) printf &#34;%d is in octal format\n&#34;, num }&#39;</span>
+<span style="color:#bd93f9">5</span> is in octal format
+<span style="color:#6272a4"># 如果 expr1 与 epxr2 至少其中一个为真，则最终结果为真;二者均为假时则为假。请注意，只有当 expr1 为假 时才会计算 expr2 的值，若 expr1 为真则不会再计算 expr2 的值。示例如下:</span>
+➜  ~ <span style="color:#ff79c6">(</span>☸ kubernetes-admin@kubernetes:default<span style="color:#ff79c6">)</span> awk <span style="color:#f1fa8c">&#39;BEGIN {ch = &#34;\n&#34;; if (ch == &#34; &#34; || ch == &#34;\t&#34; || ch == &#34;\n&#34;) print &#34;Current character is whitespace.&#34; }&#39;</span>
+Current character is whitespace.
+<span style="color:#6272a4"># 逻辑非将 expr1 的真值取反。如果 expr1 为真，则返回 0。否则返回 1。下面的示例判断字符串是否为空:</span>
+awk <span style="color:#f1fa8c">&#39;BEGIN { name = &#34;&#34;; if (! length(name)) print &#34;name is empty string.&#34; }&#39;</span></code></pre></div></li>
+
+<li><p>三元运算符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">当条件表达式<span style="color:#ff79c6">(</span> condition expression<span style="color:#ff79c6">)</span>为真时，statement1 执行，否则 statement2 执行。下面的示例将返 回最大数值
+➜  ~ <span style="color:#ff79c6">(</span>☸ kubernetes-admin@kubernetes:default<span style="color:#ff79c6">)</span> awk <span style="color:#f1fa8c">&#39;BEGIN { a = 10; b = 20; (a &gt; b) ? max = a : max = b; print &#34;Max =&#34;, max}&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Max</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span></code></pre></div></li>
+
+<li><p>字符串连接操作符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 空格 (space) 操作符可以完成两个字符串的连接操作</span>
+➜  ~ <span style="color:#ff79c6">(</span>☸ kubernetes-admin@kubernetes:default<span style="color:#ff79c6">)</span> awk <span style="color:#f1fa8c">&#39;BEGIN { str1=&#34;Hello, &#34;; str2=&#34;World&#34;; str3 = str1 str2; print str3 }&#39;</span>
+Hello, World</code></pre></div></li>
+
+<li><p>数组成员操作符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 数组成员操作符为 in。该操作符用于访问数组元素  awk -f ./demos.awk</span>
+BEGIN<span style="color:#ff79c6">{</span>
+arr<span style="color:#ff79c6">[</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">]=</span><span style="color:#bd93f9">2</span>;
+arr<span style="color:#ff79c6">[</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">]=</span><span style="color:#bd93f9">3</span>;
+arr<span style="color:#ff79c6">[</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">]=</span><span style="color:#bd93f9">4</span>;
+<span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span>i in arr<span style="color:#ff79c6">)</span>
+<span style="color:#8be9fd;font-style:italic">printf</span> <span style="color:#f1fa8c">&#34;arr[%d] = %d\n&#34;</span>, i, arr<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">]</span>
+<span style="color:#ff79c6">}</span></code></pre></div></li>
+
+<li><p>正则表达式操作符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;$0 ~ 9&#39;</span> marks.txt
+awk <span style="color:#f1fa8c">&#39;$0 !~ 9&#39;</span> marks.txt</code></pre></div></li>
+</ul>
+
+<h3 id="正则表达式">正则表达式</h3>
+
+<ul>
+<li>点(Dot) 点字符(.)可以匹配除了行结束字符的所有字符
+<code>bash
+root@awk-pratics:~/workspace# echo -e &quot;cat\nbat\nfun\nfin\nfan&quot; | awk '/f.n/'
+fun
+fin
+fan
+</code></li>
+
+<li><p>行开始 行开始符(^)匹配一行的开始</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;This\nThat\nThere\nTheir\nthese&#34;</span> | awk <span style="color:#f1fa8c">&#39;/^The/&#39;</span>
+There
+Their</code></pre></div></li>
+
+<li><p>行结束 行结束符($)匹配一行的结束</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;knife\nknow\nfun\nfin\nfan\nnine&#34;</span> | awk <span style="color:#f1fa8c">&#39;/n$/&#39;</span>
+fun
+fin
+fan</code></pre></div></li>
+
+<li><p>匹配字符集 用于匹配集合(由方括号表示)中的一个字符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;Call\nTall\nBall&#34;</span> | awk <span style="color:#f1fa8c">&#39;/[CT]all/&#39;</span>
+Call
+Tall
+root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;Call\nTall\nBall&#34;</span> | awk <span style="color:#f1fa8c">&#39;/[^CT]all/&#39;</span>
+Ball
+root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;Call\nTall\nBall\nSmall\nShall&#34;</span> | awk <span style="color:#f1fa8c">&#39;/Call|Ball/&#39;</span>
+Call
+Ball
+root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;Colour\nColor&#34;</span> | awk <span style="color:#f1fa8c">&#39;/Colou?r/&#39;</span>
+Colour
+Color
+root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;ca\ncat\ncatt&#34;</span> | awk <span style="color:#f1fa8c">&#39;/cat*/&#39;</span>
+ca
+cat
+catt
+root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;111\n22\n123\n234\n456\n222&#34;</span> | awk <span style="color:#f1fa8c">&#39;/2+/&#39;</span>
+<span style="color:#bd93f9">22</span>
+<span style="color:#bd93f9">123</span>
+<span style="color:#bd93f9">234</span>
+<span style="color:#bd93f9">222</span></code></pre></div></li>
+
+<li><p>分组</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# <span style="color:#8be9fd;font-style:italic">echo</span> -e <span style="color:#f1fa8c">&#34;Apple Juice\nApple Pie\nApple Tart\nApple Cake&#34;</span> | awk <span style="color:#f1fa8c">&#39;/Apple (Juice|Cake)/&#39;</span>
+Apple Juice
+Apple Cake</code></pre></div></li>
+</ul>
+
+<h3 id="数组">数组</h3>
+
+<p>AWK 有关联数组这种数据结构，而这种数据结构最好的一个特点就是它的索引值不需要是连续的整数值。我们 既可以使用数字也可以使用字符串作为数组的索引。除此之外，关联数组也不需要提前声明其大小，因为它在运 行时可以自动的增大或减小。</p>
+
+<p>格式:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">array_name<span style="color:#ff79c6">[</span>index<span style="color:#ff79c6">]=</span>value 其中 array_name 是数组的名称，index 是数组索引，value 为数组中元素所赋予的值</code></pre></div>
+<ul>
+<li><p>创建数组</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@awk-pratics:~/workspace# awk <span style="color:#f1fa8c">&#39;BEGIN { fruits[&#34;mango&#34;]=&#34;yellow&#34;; fruits[&#34;orange&#34;]=&#34;orange&#34;
+</span><span style="color:#f1fa8c">print fruits[&#34;orange&#34;] &#34;\n&#34; fruits[&#34;mango&#34;] }&#39;</span>
+orange
+yellow</code></pre></div></li>
+
+<li><p>删除数组</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">root@awk-pratics:~/workspace# awk &#39;BEGIN { fruits[&#34;mango&#34;]=&#34;yellow&#34;; fruits[&#34;orange&#34;]=&#34;orange&#34;; delete fruits[&#34;orange&#34;];
+print fruits[&#34;orange&#34;]
+}&#39;</pre></div></li>
+
+<li><p>多维数组
+如何表示:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#bd93f9">100</span> <span style="color:#bd93f9">200</span> <span style="color:#bd93f9">300</span>
+<span style="color:#bd93f9">400</span> <span style="color:#bd93f9">500</span> <span style="color:#bd93f9">600</span>
+<span style="color:#bd93f9">700</span> <span style="color:#bd93f9">800</span> <span style="color:#bd93f9">900</span></code></pre></div>
+<p>上面的示例中，array[0][0] 存储 100，array[0][1] 存储 200 ，依次类推。为了在 array[0][0] 处存储100, 我们 可以使用这样的表示方法:
+```bash</p>
+
+<h1 id="格式-array-0-0-100-此时数组的索引值就是-0-0-是一个字符串">格式: array[&ldquo;0,0&rdquo;] = 100 # 此时数组的索引值就是&rdquo;0,0&rdquo;,是一个字符串</h1></li>
+</ul>
+
+<p>root@awk-pratics:~/workspace#  awk &lsquo;BEGIN { array[&ldquo;0,0&rdquo;] = 100; array[&ldquo;0,1&rdquo;] = 200; array[&ldquo;0,2&rdquo;] = 300; array[&ldquo;1,0&rdquo;] = 400; array[&ldquo;1,1&rdquo;] = 500; array[&ldquo;1,2&rdquo;] = 600;</p>
+
+<h1 id="print-array-elements">print array elements</h1>
+
+<p>print &ldquo;array[0,0] = &ldquo; array[&ldquo;0,0&rdquo;]; print &ldquo;array[0,1] = &ldquo; array[&ldquo;0,1&rdquo;]; print &ldquo;array[0,2] = &ldquo; array[&ldquo;0,2&rdquo;]; print &ldquo;array[1,0] = &ldquo; array[&ldquo;1,0&rdquo;]; print &ldquo;array[1,1] = &ldquo; array[&ldquo;1,1&rdquo;]; print &ldquo;array[1,2] = &ldquo; array[&ldquo;1,2&rdquo;]; }&rsquo;
+array[0,0] = 100
+array[0,1] = 200
+array[0,2] = 300
+array[1,0] = 400
+array[1,1] = 500
+array[1,2] = 600</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">### 控制流
+- IF
+```bash
+awk &#39;BEGIN {num = 10; if (num % 2 == 0) printf &#34;%d is even number.\n&#34;, num }&#39;</pre></div>
+<ul>
+<li>IF-ELSE
+<code>bash
+awk 'BEGIN {num=12;if (num%2==0) printf &quot;%d is even number.\n&quot;,num;else printf &quot;%d is odd number.\n&quot;,num}'
+</code></li>
+<li>IF-ELSE-IF
+<code>bash
+awk 'BEGIN { a=30;                                                                                                 10016  12:25:49 
+if (a==10)
+print &quot;a = 10&quot;; else if (a == 20) print &quot;a = 20&quot;; else if (a == 30) print &quot;a = 30&quot;;
+}'
+a = 30
+</code></li>
+</ul>
+
+<h4 id="一个简单的案例">一个简单的案例</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"># BEGIN这是处理数据之前运行的脚本
+BEGIN {
+# 这是定义的变量,在以下其他阶段的脚本中也可以调用,变量的调用方式如同shell中调用变量,但是不加$符号
+separator1=&#34;           &#34;
+
+FS=&#34;:&#34;
+print &#34;用户名&#34;separator1&#34;密码&#34;separator1&#34;用户ID&#34;separator1&#34;组ID&#34;separator1&#34;用户全名&#34;separator1&#34;主目录&#34;separator1&#34;登录shell&#34;separator1}
+
+# 这是进行数据处理的脚本
+{
+print $1 separator1 $2 separator1 $3 separator1 $4 separator1 $5 separator1 $6 separator1 $7 separator1
+}
+# END这是数据处理最后要运行的脚本
+END {
+print &#34;==========================THE END=======================&#34;
+}</pre></div>
+<p>指定方式为:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">root@node1:~# gawk -f ./passwd.awk /etc/passwd</pre></div>
+<p>前段时间看了一下awk的使用选项，字段变量，标准变量，操作运算符，正则表达式，数组和控制流，并且也附带着一些相关的案例，总的来说，在深入了解和使用AWK之后，还是带来了很多的便利，在处理文本的文件的时候提供了更多的思路和便捷，比如按需自定义打印文本显示格式，进行一些简单的数据处理，同时awk还有和shell,python，go一些编程语言类似的循环，条件，逻辑处理，以及一些内置的函数更方便的帮助在命令行完成一些文本处理工作。今天完成了awk剩余的一些知识点学习。</p>
+
+<h3 id="awk中的循环">awk中的循环</h3>
+
+<h4 id="for">FOR</h4>
+
+<p>格式:<code>for (initialisation; condition; increment/decrement) action</code></p>
+
+<p>for 语句首先执行初始化动作( initialisation )，然后再检查条件( condition )。如果条件为真，则执行动作( actio n )，然后执行递增( increment )或者递减( decrement )操作。只要条件为真循环就会一直执行。每次循环结束 都会进条件检查，若条件为假则结束 循环</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { for (i = 1; i &lt;= 5; ++i) print i }&#39;</span> <span style="color:#6272a4"># 注意这里是++i,不是i++</span></code></pre></div>
+<h4 id="while">while</h4>
+
+<p>While 循环会一直执行动作直到逻辑条件为假为止,AWK 首先检查条件是否为真，若条件为真则执行动作。此过程一直重复直到条件为假时，则停止</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {i = 1; while (i &lt; 6) { print i; ++i } }&#39;</span> <span style="color:#6272a4"># 等同上面的for语句</span></code></pre></div>
+<h4 id="do-while">DO-WHILE</h4>
+
+<p>Do-While 循环与 While 循环相似，但是 Do-While 的条件测试放到了循环的尾部,在 do-while 循环中，无论条件是真是假，循环语句至少执行一次，执行后检查条件真假,使用格式如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">do action
+while (condition)</pre></div>
+<p>看一个案例:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {i = 1; do { print i; ++i } while (i &lt; 6) }&#39;</span></code></pre></div>
+<h4 id="break">break</h4>
+
+<p>break 用以结束循环过程</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">sum = 0; for (i = 0; i &lt; 20; ++i) {
+</span><span style="color:#f1fa8c">sum += i; if (sum &gt; 50) break; else print &#34;Sum =&#34;, sum }
+</span><span style="color:#f1fa8c">}&#39;</span></code></pre></div>
+<h4 id="continue">continue</h4>
+
+<p>Continue 语句用于在循环体内部结束本次循环，从而直接进入下一次循环迭代。当我们希望跳过循环中某处数据 处理时就会用到 Continue</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {for (i = 1; i &lt;= 20; ++i) {if (i % 2 == 0) print i ; else continue} }&#39;</span></code></pre></div>
+<h4 id="exit">EXIT</h4>
+
+<p>Exit 用于结束脚本程序的执行。该函数接受一个整数作为参数表示 AWK 进程结束状态。 如果没有提供该参数，其默认状态为 0</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-BASH" data-lang="BASH">awk <span style="color:#f1fa8c">&#39;BEGIN {                                                                                                       10022  12:34:02 
+</span><span style="color:#f1fa8c">sum = 0; for (i = 0; i &lt; 20; ++i) {
+</span><span style="color:#f1fa8c">sum += i; if (sum &gt; 50) exit(10); else print &#34;Sum =&#34;, sum }
+</span><span style="color:#f1fa8c">}&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">6</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">15</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">21</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">28</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">36</span>
+<span style="color:#8be9fd;font-style:italic">Sum</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">45</span>
+root <span style="color:#6272a4"># echo ? #查看期退出的状态码为指定的10</span>
+<span style="color:#bd93f9">10</span></code></pre></div>
+<h3 id="内置函数">内置函数</h3>
+
+<p>AWK 为程序开发者提供了丰富的内置函数。 包括算术函数、字符串操作函数、时间操 作相关的函数、位操作函数以及其它各种各样的函数</p>
+
+<h4 id="算术函数">算术函数</h4>
+
+<ul>
+<li>exp(expr) 返回自然数e的expr次幂
+<code>bash
+awk 'BEGIN{printf &quot;The exponential value of 5 is %f.\n&quot;,exp(5)}'
+</code></li>
+<li>int(expr) 返回数值expr的整数部分
+<code>bash
+awk 'BEGIN {printf &quot;34.1212的整数部分是: %d&quot;,int(34.1212)}'
+awk 'BEGIN {param=4.232;result=int(param);printf &quot;整数部分是:%d&quot;,result}'
+</code></li>
+<li>log(expr) 返回自然对数</li>
+<li>rand() 函数返回一个大于等于 0 小于 1 的随机数 N(0&lt;= N &lt; 1)</li>
+<li>sin(expr) 正弦函数返回角度 expr 的正弦值，角度以弧度为单位</li>
+<li>sqrt(expr) 计算 expr 的平方根</li>
+
+<li><p>srand([expr]) 使用种子值生成随机数，数值 expr 作为随机数生成器的种子值。如果没有指定 expr 的值则函数默认使 用当前系统时间作为种子值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { param = 10
+</span><span style="color:#f1fa8c">printf &#34;srand() = %d\n&#34;, srand()
+</span><span style="color:#f1fa8c">printf &#34;srand(%d) = %d\n&#34;, param, srand(param) }&#39;</span></code></pre></div>
+<h4 id="字符串函数">字符串函数</h4></li>
+
+<li><p>asort(arr,[, d [,how] ]) 函数使用 GAWK 值比较的一般规则排序 arr 中的内容，然后用以 1 开始的有序整数替换排序内容的索引
+&gt; 注意mac上的awk 20070501版本没有该函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">arr[0] = &#34;Three&#34;
+</span><span style="color:#f1fa8c">arr[1] = &#34;One&#34;
+</span><span style="color:#f1fa8c">arr[2] = &#34;Two&#34;
+</span><span style="color:#f1fa8c">print &#34;Array elements before sorting:&#34;;
+</span><span style="color:#f1fa8c">for (i in arr) {
+</span><span style="color:#f1fa8c">print arr[i]
+</span><span style="color:#f1fa8c">}
+</span><span style="color:#f1fa8c">asort(arr)
+</span><span style="color:#f1fa8c">print &#34;Array elements after sorting:&#34;
+</span><span style="color:#f1fa8c">for (i in arr) {
+</span><span style="color:#f1fa8c">print arr[i]
+</span><span style="color:#f1fa8c">}
+</span><span style="color:#f1fa8c">}&#39;</span></code></pre></div></li>
+
+<li><p>asorti(arr,[, d [,how] ]) asorti 函数的行为与 asort 函数的行为很相似，二者的差别在于 aosrt 对数组的值排序，而 asorti 对数组的索引 排序</p></li>
+
+<li><p>gsub(regx,sub, string) gsub 是全局替换( global substitution )的缩写。它将出现的子串(sub)替换为 regx。第三个参数 string 是可 选的，默认值为 $0，表示在整个输入记录中搜索子串</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;{gsub(&#34;172.16.132.148&#34;,&#34;0.0.0.0&#34;);print }&#39;</span> docker-compose.yml <span style="color:#6272a4"># 替换docker-compose.yml中的172.16.132.148为0.0.0.0</span></code></pre></div></li>
+
+<li><p>index(str,sub) index 函数用于检测字符串 sub 是否是 str 的子串。如果 sub 是 str 的子串，则返回子串 sub 在字符串 str 的开 始位置;若不是其子串，则返回 0。str 的字符位置索引从 1 开始计数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">str = &#34;One Two Three&#34;
+</span><span style="color:#f1fa8c">subs = &#34;Two&#34;
+</span><span style="color:#f1fa8c">ret = index(str, subs)
+</span><span style="color:#f1fa8c">printf &#34;Substring \&#34;%s\&#34; found at %d location.\n&#34;, subs, ret }&#39;</span></code></pre></div></li>
+
+<li><p>length(str) 返回字符串的长度</p></li>
+
+<li><p>match(str, regex) match 返回正则表达式在字符串 str 中第一个最长匹配的位置。如果匹配失败则返回0。</p></li>
+
+<li><p>split(str, arr,regex) split 函数使用正则表达式 regex 分割字符串 str。分割后的所有结果存储在数组 arr 中。如果没有指定 regex 则 使用 FS 切分。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">str = &#34;One,Two,Three,Four&#34;
+</span><span style="color:#f1fa8c">split(str, arr, &#34;,&#34;)
+</span><span style="color:#f1fa8c">print &#34;Array contains following values&#34;
+</span><span style="color:#f1fa8c">for (i in arr) { print arr[i]
+</span><span style="color:#f1fa8c">} }&#39;</span></code></pre></div></li>
+
+<li><p>sprintf(format,expr-list) sprintf 函数按指定的格式( format )将参数列表 expr-list 构造成字符串然后返回。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">str = sprintf(&#34;%s&#34;, &#34;Hello, World !!!&#34;)
+</span><span style="color:#f1fa8c">print str }&#39;</span></code></pre></div></li>
+
+<li><p>strtonum(str) strtonum 将字符串 str 转换为数值。 如果字符串以 0 开始，则将其当作十进制数;如果字符串以 0x 或 0X 开 始，则将其当作十六进制数;否则，将其当作浮点数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@dev-node1:~# awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">&gt; print &#34;Decimal num = &#34; strtonum(&#34;123&#34;)
+</span><span style="color:#f1fa8c">&gt; print &#34;Octal num = &#34; strtonum(&#34;0123&#34;)
+</span><span style="color:#f1fa8c">&gt; print &#34;Hexadecimal num = &#34; strtonum(&#34;0x123&#34;)
+</span><span style="color:#f1fa8c">&gt; }&#39;</span>
+Decimal <span style="color:#8be9fd;font-style:italic">num</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">123</span>
+Octal <span style="color:#8be9fd;font-style:italic">num</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">83</span>
+Hexadecimal <span style="color:#8be9fd;font-style:italic">num</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">291</span></code></pre></div></li>
+
+<li><p>sub(regex,sub,string)sub 函数执行一次子串替换。它将第一次出现的子串用 regex 替换。第三个参数是可选的，默认为 $0。</p></li>
+
+<li><p>substr(str, start, l) substr 函数返回 str 字符串中从第 start 个字符开始长度为 l 的子串。如果没有指定 l 的值，返回 str 从第 start 个字符开始的后缀子串</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@dev-node1:~# awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">str = &#34;Hello, World !!!&#34;; subs = substr(str, 1, 5);
+</span><span style="color:#f1fa8c">print &#34;Substring = &#34; subs }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Substring</span> <span style="color:#ff79c6">=</span> Hello
+root@dev-node1:~# awk <span style="color:#f1fa8c">&#39;BEGIN {
+</span><span style="color:#f1fa8c">str = &#34;Hello, World !!!&#34;; subs = substr(str, 1);
+</span><span style="color:#f1fa8c">print &#34;Substring = &#34; subs }&#39;</span>
+<span style="color:#8be9fd;font-style:italic">Substring</span> <span style="color:#ff79c6">=</span> Hello, World !!!</code></pre></div></li>
+
+<li><p>tolower(str) 此函数将字符串 str 中所有大写字母转换为小写字母然后返回。注意，字符串 str 本身并不被改变。</p></li>
+
+<li><p>toupper(str)此函数将字符串 str 中所有小写字母转换为大写字母然后返回。注意，字符串 str 本身不被改变。</p>
+
+<h4 id="时间函数">时间函数</h4></li>
+
+<li><p>systime 此函数返回从 Epoch 以来到当前时间的秒数</p></li>
+
+<li><p>mktime(dataspec) 此函数将字符串 dataspec 转换为与 systime 返回值相似的时间戳。 dataspec 字符串的格式为 YYYY MM D D HH MM SS。</p></li>
+
+<li><p>strftime([format [, timestamp[, utc-flag]]]) 函数根据 format 指定的格式将时间戳 timestamp 格式化</p></li>
+</ul>
+
+<h4 id="位操作函数">位操作函数</h4>
+
+<ul>
+<li>and 执行位与操作</li>
+<li>compl 按位求补</li>
+<li>lshift 左移位操作
+<code>bash
+awk 'BEGIN { num1 = 10
+printf &quot;lshift(%d) by 1 = %d\n&quot;, num1, lshift(num1, 1) }'
+</code></li>
+<li>rshift 向右移位操作</li>
+<li>or 按位或操作</li>
+<li>xor 按位异或操作</li>
+</ul>
+
+<h4 id="其他函数">其他函数</h4>
+
+<ul>
+<li>delete 被用于从数组中删除元素</li>
+<li>exit 该函数终止脚本执行。它可以接受可选的参数 expr 传递 AWK 返回状态</li>
+<li>flush 函数用于刷新打开文件或管道的缓冲区</li>
+<li>getline 函数读入下一行</li>
+<li>next 停止处理当前记录，并且进入到下一条记录的处理过程
+<code>bash
+awk '{if ($0 ~/Shyam/) next; print $0}' marks.txt
+</code></li>
+<li>nextfile 停止处理当前文件，从下一个文件第一个记录开始处理
+<code>bash
+awk '{ if ($0 ~ /file1:str2/) nextfile; print $0 }' file1.txt file2.txt
+</code></li>
+<li>return 用于从用户自定义的函数中返回值。请注意，如果没有指定返回值，那么的返回值是未定义的
+<code>bash
+cat &lt;&lt; EOF &gt;&gt; functions.awk
+function addition(num1, num2) {
+result = num1 + num2
+return result }
+BEGIN {
+res = addition(10, 20) print &quot;10 + 20 = &quot; res
+}
+EOF
+</code></li>
+
+<li><p>system 函数可以执行特定的命令然后返回其退出状态。返回值为 0 表示命令执行成功;非 0 表示命令执行失 败</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { ret = system(&#34;date&#34;); print &#34;Return value = &#34; ret }&#39;</span></code></pre></div>
+<h3 id="输出重定向">输出重定向</h3></li>
+
+<li><p>重定向操作符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { print &#34;Hello, World !!!&#34; &gt; &#34;/tmp/message.txt&#34; }&#39;</span></code></pre></div></li>
+
+<li><p>追加操作符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { print &#34;Hello, World !!!&#34; &gt; &#34;/tmp/message.txt&#34; }&#39;</span></code></pre></div></li>
+
+<li><p>管道
+除了使用文件在程序之间传递数据之外，AWK 还提供使用管道将一个程序的输出传递给另一个程序。这种重定 向方式会打开一个管道，将对象的值通过管道传递给管道另一端的进程，然后管道另一端的进程执行命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">awk <span style="color:#f1fa8c">&#39;BEGIN { print &#34;hello, world !!!&#34; | &#34;tr [a-z] [A-Z]&#34; }&#39;</span></code></pre></div></li>
+
+<li><p>双向通信通道
+AWK 允许使用 |&amp; 与一个外部进程通信，并且可以双向通信。下面的例子中，我们仍然使用 tr 命令将字母转换为 大写字母</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">BEGIN <span style="color:#ff79c6">{</span>
+<span style="color:#8be9fd;font-style:italic">cmd</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;tr [a-z] [A-Z]&#34;</span>
+print <span style="color:#f1fa8c">&#34;hello, world !!!&#34;</span> |&amp; cmd close<span style="color:#ff79c6">(</span>cmd, <span style="color:#f1fa8c">&#34;to&#34;</span><span style="color:#ff79c6">)</span>
+cmd |&amp; getline out
+print out;
+close<span style="color:#ff79c6">(</span>cmd<span style="color:#ff79c6">)</span>;
+<span style="color:#ff79c6">}</span></code></pre></div></li>
+
+<li><p>第一条语句 cmd = &ldquo;tr [a-z] [A-Z]&rdquo; 在AWK 中建立了一个双向的通信通道。</p></li>
+
+<li><p>第二条语句 print 为 tr 命令提供输入。&amp;| 表示双向通信。</p></li>
+
+<li><p>第三条语句 close(cmd, &ldquo;to&rdquo;) 执行后关闭 to 进程。</p></li>
+
+<li><p>第四条语句 cmd |&amp; getline out 使用 getline 函数将输出存储到 out 变量中。</p></li>
+
+<li><p>接下来的输出语句打印输出的内容，最后 close 函数关闭 cmd</p></li>
+</ul>
+
+          
+<h2>微信公众号</h2>
+<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
+<img src="https://pic.downk.cc/item/5e6cce51e83c3a1e3a41b83f.png" alt="wechat-account-qrcode">
+
+  
+          
+            <div class="entry-shang text-center">
+    <p>「真诚赞赏，手留余香」</p>
+    <button class="zs show-zs btn btn-bred">赞赏</button>
+</div>
+<div class="zs-modal-bg"></div>
+<div class="zs-modal-box">
+    <div class="zs-modal-head">
+        <button type="button" class="close">×</button>
+        <span class="author"><img src="https://www.kubemaster.top/img/wechat-logo.jpeg"/>Marion</span>
+        <p class="tip"><i></i><span>请我喝杯咖啡？</span></p>
+    </div>
+    <div class="zs-modal-body">
+        <div class="zs-modal-btns">
+            <button class="btn btn-blink" data-num="2">2元</button>
+            <button class="btn btn-blink" data-num="5">5元</button>
+            <button class="btn btn-blink" data-num="10">10元</button>
+            <button class="btn btn-blink" data-num="50">50元</button>
+            <button class="btn btn-blink" data-num="100">100元</button>
+            <button class="btn btn-blink" data-num="1">任意金额</button>
+        </div>
+        <div class="zs-modal-pay">
+            <button class="btn btn-bred" id="pay-text">2元</button>
+            <p>使用<span id="pay-type">微信</span>扫描二维码完成支付</p>
+            <img src="https://www.kubemaster.top/img/wechatcn-btn.png" id="pay-image"/>
+        </div>
+    </div>
+    <div class="zs-modal-footer">
+        <span class="zs-wechat"><img src="https://www.kubemaster.top/img/wechat-btn.png"/></span>
+    </div>
+</div>
+          
+          
+            
+<div class="social-share" data-initialized="true" style="margin-bottom: 20px;margin-top:20px;">
+    <center>
+    <a href="#" class="social-share-icon icon-weibo"></a>
+    <a href="#" class="social-share-icon icon-wechat"></a>
+    <a href="#" class="social-share-icon icon-twitter"></a>
+    <a href="#" class="social-share-icon icon-linkedin"></a>
+    <a href="#" class="social-share-icon icon-facebook"></a>
+    <a href="#" class="social-share-icon icon-qq"></a>
+    <a href="#" class="social-share-icon icon-qzone"></a>
+    </center>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+          
+        </article>
+  
+        
+          
+
+<h3>相关文章</h3>
+<ul style="margin-bottom: 25px;">
+    
+    <li><a href="https://www.kubemaster.top/post/awk-base-compute/">用awk做基本运算</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/a-better-git-log/">更优雅的git log</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/make-https-blog/">给博客加上HTTPS</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/nginx-301-redirect/">Nginx中如何设置301跳转</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app-part2/">TDD开发容器化的Python微服务应用(二)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/upgrading-django-20-10-tips/">更新django2.0的10条注意事项</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app/">TDD开发容器化的Python微服务应用(一)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/webpack3-get-started/">webpack3入门到放肆视频教程</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/python-convert-pdf-images/">利用Python 优雅的将PDF 转换成图片</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/django-staticroot-staticfilesdirs-function/">Django 中STATIC_ROOT 与STATICFILES_DIRS的区别</a></li>
+    
+</ul>
+
+        
+  
+        
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://www.kubemaster.top/post/devops-base-on-jenkins/" data-toggle="tooltip" data-placement="top" title="基于 Jenkins 的 DevOps 流水线实践">&larr; 前一篇</a>
+            </li>
+          
+          
+        </ul>
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-5376999672787220"
+            data-ad-slot="3700507799"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+  
+        
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    var gitalk = new Gitalk({
+        clientID: 'bdb76dbb2e9d0786e350',
+        clientSecret: 'b454b2a08013fd0e32013be7a63fa8fcb262b6c4',
+        repo: 'blog',
+        owner: 'cnych',
+        admin: ['cnych'],
+        labels: ['gitment'],
+        title: 'Awk权威指南',
+        createIssueManually: true,
+        id: 'awk-advance-turtorial',      
+        distractionFreeMode: true  
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+  
+      </div>
+    
+    
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          <img src="https://pic.downk.cc/item/5e6cc64de83c3a1e3a3e5ea1.jpg" alt="云原生生态圈">
+          
+              <li>
+                <a href="mailto:icnych@gmail.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://github.com/cnych" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://weibo.com/cnych" title="微博">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://instagram.com/cnych" title="Instagram">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          
+          <li>
+            <a href="https://www.kubemaster.top/index.xml" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/">云原生生态圈</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/sitemap.xml">网站地图</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/archive/">归档</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/friend/">友链</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MTQzNjQ5Ng==#wechat_redirect" target="_blank">公众号历史文章</a>
+            
+          
+        </p>
+        <p class="text-center text-muted">
+          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+          <span id="busuanzi_container_site_pv" style="display:none">
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次
+          </span>
+          &nbsp;&bull;&nbsp;
+          <span id="busuanzi_container_site_uv" style="display:none">
+            访客数<span id="busuanzi_value_site_uv"></span>人次
+          </span>
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          由 <a href="http://gohugo.io">Hugo v0.54.0</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/marionxue/marionxue.github.io">云原生生态圈</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src='https://www.kubemaster.top/js/bundle.min.76b616091e53a94d6909ba0a295da18780df89e8a2ac90870d207a478c15af42.js' integrity='sha256-drYWCR5TqU1pCboKKV2hh4DfieiirJCHDSB6R4wVr0I='></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158705628-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-158705628-1');
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script >
+$(document).ready(function() {
+  var int = setInterval(fixCount, 50);  
+  
+  var initPVCount = 584976;
+  var initUVCount = 153191;
+  function fixCount() {                   
+    if ($("#busuanzi_container_site_pv").css("display") != "none") {
+        $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + initPVCount); 
+        clearInterval(int); 
+    }
+    if ($("#busuanzi_container_site_uv").css("display") != "none") {
+      $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + initUVCount);
+      clearInterval(int); 
+    }  
+  }           
+});
+</script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+$('.carousel').slick({
+    dots: true,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    cssEase: 'linear',
+    centerMode: true,
+    prevArrow: '<button type="button" class="slick-prev"></button>',
+    nextArrow: '<button type="button" class="slick-next"></button>',
+});
+</script>
+
+  </body>
+</html>
+

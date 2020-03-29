@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+
+  <title>DevOps工程师面试33问-云原生生态圈|Kubernetes|Istio|Prometheus|Python|Golang|云原生|CloudNative</title>
+  <meta property="og:title" content="DevOps工程师面试33问" />
+  <meta name="twitter:title" content="DevOps工程师面试33问" />
+
+  <meta name="description" content="">
+  <meta property="og:description" content="">
+  <meta name="twitter:description" content="">
+  <meta name="author" content=""/>
+  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/favicon.png"/>
+  <meta property="og:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:image" content="https://www.kubemaster.top/img/avatar.jpeg" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://www.kubemaster.top/post/devops-interview-questions-33/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="云原生生态圈" />
+
+  <meta name="generator" content="Hugo 0.54.0" />
+  <link rel="canonical" href="https://www.kubemaster.top/post/devops-interview-questions-33/" />
+  <link rel="alternate" href="https://www.kubemaster.top/index.xml" type="application/rss+xml" title="云原生生态圈">
+
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
+  
+
+  <link rel="stylesheet" href='https://www.kubemaster.top/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  
+  
+    
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <![endif]-->
+<meta name="google-site-verification" content="oKxX4fOvB2yYmU02txZFChM93XQbESU4JaG3tNH9Hm8" />
+<meta name="baidu-site-verification" content="F5ojAyqaKU" />
+<meta name="keywords" content="">
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d611849735f187dd788dc054908f7d7a";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-158705628-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://www.kubemaster.top/" title="云原生生态圈">
+        <img src="https://pic.downk.cc/item/5e6cbaa8e83c3a1e3a364ae6.png" style="margin-top: -5px;height: 32px;" alt="云原生生态圈">
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="首页" href="https://www.kubemaster.top/">首页</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">文章分类</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.kubemaster.top/archives">Archive</a>
+                
+                  <a href="https://www.kubemaster.top/tags">tags</a>
+                
+                  <a href="https://www.kubemaster.top/tags/kubernetes">kubernetes</a>
+                
+                  <a href="https://www.kubemaster.top/tags/python">python</a>
+                
+                  <a href="https://www.kubemaster.top/tags/django">django</a>
+                
+                  <a href="https://www.kubemaster.top/tags/devops">devops</a>
+                
+                  <a href="https://www.kubemaster.top/tags/golang">go</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">书籍</a>
+              <div class="navlinks-children">
+                
+                  <a href="https://www.qikqiak.com/k8s-book/">k8s进阶手册</a>
+                
+                  <a href="https://www.kubemaster.top/istio-book/">一起学istio</a>
+                
+                  <a href="https://www.qikqiak.com/tdd-book/">Python微服务</a>
+                
+                  <a href="https://md.qikqiak.com/">Markdown微信</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="关于" href="https://www.kubemaster.top/page/about/">关于</a>
+            </li>
+          
+        
+
+        
+
+        
+
+        
+          <li>
+            <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" style="outline: none;">
+              <span id="searchGlyph" class="glyphicon glyphicon-search"></span>
+            </a>
+          </li>
+          
+
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+
+  <div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">搜索</h4>
+        </div>
+        <div class="modal-body">
+            
+<div class="aa-input-container" id="aa-input-container">
+    <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+    <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+        <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+    </svg>
+</div>
+<script src="https://www.kubemaster.top/js/algoliasearch.min.js"></script>
+<script src="https://www.kubemaster.top/js/autocomplete.min.js"></script>
+
+<script>
+var client = algoliasearch("1JDRAS0AZR", "");
+var index = client.initIndex('prod_blog');
+
+autocomplete('#aa-search-input',
+{ hint: false}, {
+    source: autocomplete.sources.hits(index, {hitsPerPage: 5}),
+    
+    displayKey: 'name',
+    
+    templates: {
+        
+        suggestion: function(suggestion) {
+            return '<span>' + '<a href="https://www.kubemaster.top/post/' + suggestion.slug + '">' +
+            suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+  
+  
+  
+
+
+
+
+  
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://www.kubemaster.top/img/posts/18888531_442371539465605_1833253399559143424_n.jpg" data-img-desc-1="乌镇水乡@杭州 JUNE 1,2017"></div>
+  
+
+  <header class="header-section has-img">
+    
+      <div class="intro-header big-img">
+        
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <div class="post-heading">
+                <h1>DevOps工程师面试33问</h1>
+                  
+                  
+                    <span class="post-meta">
+  
+    发表于 March 28, 2020
+  
+  
+</span>
+
+
+                  
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="img-desc" style="display: inline;"></span>
+      </div>
+    
+    
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>DevOps工程师面试33问</h1>
+                
+                
+                  <span class="post-meta">
+  
+    发表于 March 28, 2020
+  
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </header>
+
+
+    
+
+
+
+<div class="container" role="main">
+  <div class="row">
+
+    
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div>
+            
+            
+            <h5 id="tags" style="margin-top: 30px;">标签:
+              
+                  <a href="https://www.kubemaster.top/tags/devops/">devops</a> &nbsp;
+              
+                  <a href="https://www.kubemaster.top/tags/interview/">interview</a> &nbsp;
+              
+            </h5>
+            
+        </div>
+  
+        <article role="main" class="blog-post" itemprop="articleBody" id="content">
+          
+            
+          
+  
+          
+          
+          
+  
+          
+          
+          
+  
+          
+          
+          
+
+          <figure><img src="https://www.kubemaster.top/img/posts/devops-interview1.png" alt="devops-interview"><figcaption>devops-interview</figcaption></figure>
+
+<h4 id="01-您能告诉我们devops和agile-敏捷-之间的根本区别吗">01 您能告诉我们DevOps和Agile(敏捷)之间的根本区别吗？</h4>
+
+<p>答：尽管DevOps与敏捷方法（这是最流行的SDLC[Software Development Life Cycle]方法之一）有一些相似之处，但两者在软件开发方面都是根本不同的方法。以下是两者之间的各种基本差异：</p>
+
+<ul>
+<li><code>敏捷方法</code> 敏捷方法适用于敏捷中的开发同时敏捷方法适用于DevOps中的开发和操作。</li>
+<li><code>实践和流程</code> 敏捷涉及敏捷Scrum和敏捷看板等实践，而DevOps涉及CD（持续交付），CI（持续集成）和CT（持续测试）等流程。</li>
+<li><code>优先级</code> 敏捷优先考虑及时性，而DevOps优先考虑及时性和质量。</li>
+<li><code>发布周期</code> DevOps提供较小的发布周期并提供即时反馈，而敏捷仅提供较小的发布周期而没有立即反馈。</li>
+<li><code>反馈源</code> 敏捷依赖于客户的反馈，而DevOps涉及到自身（监控工具）的反馈。</li>
+<li><code>工作范围</code> 对于敏捷，工作范围仅是敏捷，而对于DevOps，这是敏捷和对自动化的需求。</li>
+</ul>
+
+<h4 id="02-为什么我们需要devops">02 为什么我们需要DevOps？</h4>
+
+<p>答：如今，很多组织或企业正试图通过一系列的发布小的特性传递给客户，而不是发布大的特性集。这样做有几个好处，包括更好的软件质量和快速的客户反馈，所有这些好处导致更高的客户满意度，这是任何产品开发项目的最重要目标。为此，公司需要：
+- 增加部署频率
+- 缩短修复时间
+- 降低新版本的失败率
+- 万一新版本崩溃，请有更快的平均恢复时间</p>
+
+<p>DevOps有助于满足所有这些要求，从而实现无缝的软件交付。像Amazon，Etsy和Google这样的成熟组织已采用DevOps方法，从而实现了以前未知的性能水平。通过采用DevOps方法，组织可以在一天之内完成数以万计的部署。此外，这样做还可以提供一流的<code>可靠性</code>、<code>安全性</code>和<code>稳定性</code>。</p>
+
+<h4 id="03-使用devops有哪些重要的业务和技术优势">03 使用DevOps有哪些重要的业务和技术优势？</h4>
+
+<p>答：DevOps为该表带来了很多业务和技术优势。下面列出了一些最重要的参数：</p>
+
+<ul>
+<li><p>商业利益：</p>
+
+<ul>
+<li>增强的操作环境稳定性</li>
+<li>更快地交付功能</li>
+<li>更多时间为产品增值</li>
+</ul></li>
+
+<li><p>技术优势：</p>
+
+<ul>
+<li>持续交付软件</li>
+<li>更快地解决问题</li>
+<li>较小的复杂问题</li>
+</ul></li>
+</ul>
+
+<h4 id="04-您能列举一些最常用的devops工具吗">04 您能列举一些最常用的DevOps工具吗？</h4>
+
+<p>答：以下是一些使用最广泛的DevOps工具的列表：</p>
+
+<ul>
+<li>Ansible/Puppet/chef/saltstack –配置管理和应用程序部署工具</li>
+<li>Docker –容器化工具</li>
+<li>Git/Gitlab –版本控制系统（VCS）工具</li>
+<li>Jenkins –持续集成（CI）工具</li>
+<li>Nexus - 制品库管理工具</li>
+<li>Jira –敏捷的团队协作工具</li>
+<li>wiki -文档管理工具</li>
+<li>Promtheus –连续监控工具</li>
+<li>Selenium/jmeter –连续测试（CT）工具</li>
+</ul>
+
+<h4 id="05-selenium的用途是什么">05 Selenium的用途是什么？</h4>
+
+<p>答：selenium用于DevOps中的连续测试。该工具专门从事功能和回归形式的测试。</p>
+
+<h4 id="06-您对devops中的puppet有什么了解">06 您对DevOps中的Puppet有什么了解？</h4>
+
+<p>答：这是一个配置管理工具，用于自动执行管理任务。Puppet利用主从结构，其中两个实体通过加密通道进行通信。系统管理员需要执行许多重复性任务，尤其是安装和配置服务器。编写脚本来自动执行此类任务是一种选择，但是当基础结构很大时，执行的操作就会变得繁琐重复。为此，配置管理是一个不错的解决方法。</p>
+
+<p>Puppet帮助配置、部署和管理服务器。这不仅使此类冗余任务变得更加容易，而且节省了总工作时间的很大一部分。成熟的配置管理工具：
+- 持续检查主机所需的配置是否到位。如果更改了，配置将自动还原
+- 为每个主机定义不同的配置
+- 对机器进行动态缩放（上下缩放）
+- 提供对所有已配置计算机的控制，以便可以将集中更改自动传播到所有这些计算机</p>
+
+<h4 id="07-您对devops的反模式有什么了解">07 您对DevOps的反模式有什么了解？</h4>
+
+<p>答：如果其他组织通常采用的DevOps模式在特定环境下不起作用，而组织仍在继续使用它，则会导致采用反模式。换句话说，反模式是关于DevOps的神话。一些著名的反模式是：</p>
+
+<ul>
+<li>一个组织需要有一个单独的DevOps组</li>
+<li>敏捷等于DevOps</li>
+<li>DevOps是一个过程</li>
+<li>DevOps是开发驱动的发布管理</li>
+<li>由于组织独特唯一的，因此无法进行DevOps</li>
+<li>我们不能做DevOps因为我们已经很牛了</li>
+<li>DevOps意味着开发人员管理生产</li>
+<li>DevOps将解决所有问题</li>
+<li>无法在正在进行的DevOps过渡中包含组织的所有方面</li>
+<li>在DevOps过渡开始时未定义KPI</li>
+<li>通过一个新的DevOps团队来减少与其他组织之间的隔离</li>
+</ul>
+
+<h4 id="08-devops有一个叫做ci的东西-它是什么-目的是什么">08 DevOps有一个叫做CI的东西。它是什么，目的是什么？</h4>
+
+<p>答：DevOps中的CI代表持续集成。CI是一种开发实践，开发人员可以在一天内多次将代码集成到共享存储库中。
+- 开发和测试的持续集成提高了软件的质量，并减少了交付所需的总时间。
+- 如果检查代码的团队成员遇到编译失败，则开发人员将终止构建。如果开发人员不将编译错误引入自己的工作空间中，那么其他的开发成员就无法与共享源代码存储库进行同步。
+- 这破坏了协作和共享的开发过程。因此，一旦配置项构建中断，立即识别并纠正问题就很重要。
+- 通常，持续集成(CI)流程包括一组单元、集成和回归测试，这些测试在每次编译成功时运行。如果上述任何一个测试失败，CI构建就会被认为是不稳定的(这在敏捷sprint中很常见，因为开发正在进行中)，并且没有被破坏。</p>
+
+<h4 id="09-我们经常听到devops向左移动-它是什么">09 我们经常听到DevOps向左移动。它是什么？</h4>
+
+<p>答：画在纸上的传统软件开发生命周期有左右两边。图的左侧包括设计和开发，而右侧包括生产阶段，压力测试和用户接受度。在DevOps中向左移动仅意味着需要在右侧执行尽可能多的任务，即通常在应用程序开发过程的结尾发生，并将其纳入DevOps方法的早期阶段。有几种方法可以完成DevOps中的操作，最值得注意的是：
+- 在每个敏捷sprint结束时创建可用于生产的文件(制品文件)
+- 在每个版本中都包含静态代码分析程序
+- 正确执行DevOps的级别直接取决于尽可能左移的程度。</p>
+
+<h4 id="10-devops中的cams代表什么">10 DevOps中的CAMS代表什么？</h4>
+
+<p>答：首字母缩写CAMS通常用于描述DevOps方法论的核心信条。它代表：
+- 文化 Culture
+- 自动化 Automation
+- 度量 Measurement
+- 分享 Sharing</p>
+
+<h4 id="11-用来评估devops成功的几个kpi是什么">11 用来评估DevOps成功的几个KPI是什么？</h4>
+
+<p>答：kpi是关键绩效指标的简写形式。为了度量DevOps过程的成功，可以使用几个kpi。其中最流行的有:
+- 应用性能
+- 应用程序的使用和流量
+- 自动测试通过率
+- 可用性
+- 体量的变化
+- 客户的工单
+- 缺陷逃逸率
+- 部署频率
+- 部署时间
+- 错误率
+- 部署失败数
+- 负载时间
+- 平均故障检测时间（MTTD）
+- 平均故障恢复时间（MTTR）</p>
+
+<h4 id="12-您认为实施devops自动化的主要好处是什么">12 您认为实施DevOps自动化的主要好处是什么？</h4>
+
+<p>答：以下是实现DevOps自动化的主要好处：
+- 从CD方程式中消除人为错误的可能性（核心收益）
+- 随着任务变得更加可预测和可重复，一旦出现问题，就很容易识别和纠正。因此，它产生了更可靠和健壮的系统
+- 从CI管道中移除瓶颈。这会导致部署频率增加和失败的部署数量减少。它们都是重要的DevOps KPI</p>
+
+<h4 id="13-您对容器了解什么">13 您对容器了解什么？</h4>
+
+<p>答：容器是一种轻量级虚拟化形式，有助于在进程之间提供隔离。容器比chroot重，但比管理程序轻。</p>
+
+<h4 id="14-您对版本控制系统-vcs-有什么了解-定义其用途">14 您对版本控制系统（VCS）有什么了解？定义其用途。</h4>
+
+<p>答：版本控制系统或VCS是一种能够记录一段时间内对一个文件或一组文件所做的更改的系统。Git和Mercurial是两个最受欢迎的版本控制系统。VCS的重要用途是：
+- 检查导致问题的最后修改是什么
+- 比较随着时间的变化情况
+- 识别谁在什么时间提出新的问题
+- 将一个或多个文件还原到某个较早的状态
+- 将整个项目还原到以前的状态</p>
+
+<h4 id="15-git是流行的devops工具-告诉我们您将如何还原已经推送并公开的提交">15 Git是流行的DevOps工具。告诉我们您将如何还原已经推送并公开的提交。</h4>
+
+<p>答：有两种方法可以这样做：
+1. 通过创建新的提交来撤消已被推送并公开的提交所做的所有更改。执行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git revert</code></pre></div>
+<ol>
+<li>通过修复或删除新提交中的错误文件，然后将其推送到远程存储库。对文件进行必要的更改后，使用以下命令将其提交到远程存储库：
+<code>bash
+git commit -m &quot;commit message&quot;
+</code></li>
+</ol>
+
+<h4 id="16-什么是post-mortem-meetings">16 什么是post mortem meetings？</h4>
+
+<p>参考回答：在这个会议上，我们讨论出了什么问题，应该采取什么步骤，这样失败就不会再次发生。事后分析会议并不是要找出问题的症结所在，而是要防止再次发生类似的工作，和ITIL中的问题管理是相类似的管理方法。并应重新计划新的设计基础设施，以便尽可能减少停机时间。如果错误我们无法避免，那么我们应从错误中学习，以提交IT整体的质量管理。</p>
+
+<h4 id="17-资产管理和配置管理之间的比较">17 资产管理和配置管理之间的比较。</h4>
+
+<p>答：监视和维护对实体或组有价值的东西的过程称为资产管理。配置管理是指控制，识别，计划和验证服务中的配置项以支持变更管理的过程。</p>
+
+<h4 id="18-您能否陈述和解释连续测试的各个关键要素">18 您能否陈述和解释连续测试的各个关键要素？</h4>
+
+<p>答：持续测试的各种关键要素包括：
+- 高级分析–用于预测和预测未知的未来事件
+- 策略分析–旨在改善测试过程的手段
+- 需求可追溯性–指描述需求以及从需求的起源到部署的整个过程的能力
+- 风险评估–识别可能造成潜在损害的危害和风险因素的方法或过程
+- 服务虚拟化–允许使用虚拟服务代替生产服务。仿真软件组件以进行简单测试
+- 测试优化–改善整体测试流程</p>
+
+<h4 id="19-请从开发和基础架构方面说明devops的核心运营">19 请从开发和基础架构方面说明DevOps的核心运营。</h4>
+
+<p>答：DevOps在开发和基础架构方面的核心运营是：
+- 应用程序开发–开发能够满足所有客户要求并提供卓越质量水平的产品
+- 代码覆盖率–测量在运行自动测试时执行的代码的块，线或弧的总数
+- 代码开发–准备产品开发所需的代码库
+- 配置–以最佳方式使用产品
+- 部署–安装要由最终用户使用的软件
+- 编排–安排一些自动化任务
+- 打包–发布准备好部署时所涉及的活动
+- 供应–确保基础设施的更改及时地与需要它的代码一起到达
+- 单元测试–测试单个单元或组件的方法</p>
+
+<h4 id="20-您对devops有什么了解">20 您对DevOps有什么了解？</h4>
+
+<p>您的答案必须简单明了。首先介绍一下DevOps在IT行业中的重要性。讨论这种方法如何旨在使开发和运营团队共同努力，以最小的故障率加速软件产品的交付。包括DevOps如何成为增值实践，开发和运维工程师在整个产品或服务生命周期中（从设计阶段到部署点）携手合作。</p>
+
+<h4 id="21-为什么最近几年devops变得突出">21 为什么最近几年DevOps变得突出？</h4>
+
+<p>在谈论DevOps的日益普及之前，请讨论当前的行业情况。首先，举例说明Netflix和Facebook等大型公司如何投资DevOps来自动化和加速应用程序部署，以及这如何帮助他们发展业务。以Facebook为例，您将指出Facebook的持续部署和代码所有权模型，以及这些模型如何帮助其扩大规模，同时确保体验质量。在不影响质量，稳定性和安全性的情况下实现了数百行代码。</p>
+
+<p>下一个用例应该是Netflix。这家流媒体和点播视频公司采用完全自动化的流程和系统遵循类似的做法。提及这两个组织的用户群：Facebook有20亿用户，而Netflix将在线内容流传输给全球超过1亿用户。</p>
+
+<p>这些都是很好的例子，说明DevOps如何帮助组织确保更高的发布成功率，减少错误修复之间的准备时间，通过自动化简化并持续交付，以及总体上降低人力成本。</p>
+
+<h4 id="22-哪些是最受欢迎的devops工具-您是否有使用这些工具的经验">22 哪些是最受欢迎的DevOps工具？您是否有使用这些工具的经验？</h4>
+
+<p>较流行的DevOps工具包括：
+- selenium
+- ansible
+- git/gitlab
+- jenkins
+- docker</p>
+
+<h4 id="23-您是否想要掌握所有这些devops工具">23 您是否想要掌握所有这些Devops工具？</h4>
+
+<p>彻底描述您有信心的任何工具，其功能以及为什么要使用它。例如，如果您具有Git方面的专业知识，则可以告诉采访者Git是一种分布式版本控制系统（VCS）工具，该工具可让用户跟踪文件更改并在需要时还原为特定更改。讨论Git的分布式体系结构如何为开发人员带来更多优势，使开发人员可以在本地进行更改，并可以在其本地Git存储库中拥有整个项目历史记录，以后可以与其他团队成员共享。</p>
+
+<h4 id="24-什么是版本控制-为什么要使用vcs">24 什么是版本控制？为什么要使用VCS？</h4>
+
+<p>定义版本控制，并讨论该系统如何记录对一个或多个文件所做的任何更改并将其保存在集中式存储库中。VCS工具将帮助您重新调用以前的版本并执行以下操作：</p>
+
+<ul>
+<li><p>仔细查看一段时间内所做的更改，然后检查哪些有效，哪些无效。</p></li>
+
+<li><p>将特定文件或特定项目还原回旧版本。</p></li>
+
+<li><p>检查由于特定更改而发生的问题或错误</p></li>
+
+<li><p>使用VCS为开发人员提供了同时处理特定文件的灵活性，并且所有修改内容以后都可以进行逻辑组合。</p></li>
+</ul>
+
+<h4 id="25-敏捷和devops之间有区别吗-如果是-请解释">25 敏捷和DevOps之间有区别吗？如果是，请解释。</h4>
+
+<p>作为一名DevOps工程师，对这样的面试问题充满期待。首先描述DevOps与敏捷之间明显的重叠。尽管DevOps的实现始终与敏捷方法保持同步，但是两者之间存在明显的差异。敏捷原则与软件的无缝生产或开发相关。另一方面，DevOps处理开发工作，然后部署软件，以确保更快的周转时间，最小的错误和可靠性。</p>
+
+<h4 id="26-为什么配置管理过程和工具很重要">26 为什么配置管理过程和工具很重要？</h4>
+
+<p>讨论正在开发的每个软件或测试软件的多个软件构建，发行，修订和版本。继续说明存储和维护数据的需求，跟踪开发构建和简化的故障排除。不要忘了提到可用于实现这些目标的关键CM工具。讨论诸如Puppet，Ansible和Chef之类的工具如何在多个服务器上自动化软件部署和配置的过程中提供帮助。</p>
+
+<h4 id="27-chef如何用作cm工具">27 Chef如何用作CM工具？</h4>
+
+<p>chef被认为是行业首选的CM工具之一。例如，Facebook将其基础架构和后端IT迁移到了Chef平台。解释Chef如何通过自动化流程来帮助您避免延迟。这些脚本是用Ruby编写的。它可以与基于云的平台集成并配置新系统。它提供了许多用于基础结构开发的库，这些库以后可以部署在软件中。借助其集中式管理系统，一台Chef服务器足以用作部署各种策略的中心。</p>
+
+<h4 id="28-您如何解释-基础架构即代码-iac-的概念">28 您如何解释“基础架构即代码”（IaC）的概念？</h4>
+
+<p>谈论IaC是一个好主意，有时将其称为可编程基础结构，在该基础结构中，与其他任何代码的感知方式相同。描述传统的基础架构管理方法如何退居二线，以及手动配置，过时的工具和自定义脚本的可靠性如何降低。接下来，重点介绍IaC的好处，以及如何使用IaC更快，更安全，更轻松地对IT基础架构进行更改。包括IaC的其他好处，例如将常规的单元测试和集成测试应用于基础结构配置，以及维护最新的基础结构文档。</p>
+
+<p>如果您已经完成了Amazon Web Services（AWS）的认证，并且正在接受诸如AWS认证的DevOps工程师之类的利基角色的面试，那么您必须准备以下一些AWS DevOps面试问题：</p>
+
+<h4 id="29-aws在devops中的作用是什么">29 AWS在DevOps中的作用是什么？</h4>
+
+<p>在面试中被问到此问题时，请直接说明，AWS是亚马逊提供的基于云的服务，可通过无限的计算能力和存储来确保可扩展性。AWS使IT企业能够开发和交付复杂的产品，并在云上部署应用程序。其一些关键服务包括Amazon CloudFront，Amazon SimpleDB，Amazon Relational Database Service和Amazon Elastic Computer Cloud。讨论各种云平台，并强调您过去使用云基础架构处理过的任何大数据项目。</p>
+
+<h4 id="30-持续集成的成功因素是什么">30 持续集成的成功因素是什么？</h4>
+
+<ul>
+<li>维护代码库</li>
+<li>自动化构建</li>
+<li>让构建自我测试</li>
+<li>每个人每天将代码都提交到基线</li>
+<li>每次提交（到基线）都应该被构建</li>
+<li>保持快速构建</li>
+<li>在预发布环境中进行测试</li>
+<li>轻松获取最新交付物</li>
+<li>每个人都可以看到最新版本的结果</li>
+<li>自动化部署</li>
+</ul>
+
+<h4 id="你如何在我公司实践devops">你如何在我公司实践DevOps？</h4>
+
+<p>参考回答：作为一名DevOps工程师，我会对DevOps项目管理的管理目标、敏捷交付、持续集成进行管理，并从敏捷项目管理新三角《敏捷项目管理》出发，与团队一起设定目标，实现简化的ITIL工作流，维护敏捷的DevOps管理范围，研究和引入新的技术或框架，通过DevOps 流水线，实现从需求转化为工作流从整体工具链进行全局优化。</p>
+
+<h4 id="配置管理工具在devops中的作用是什么">配置管理工具在devops中的作用是什么?</h4>
+
+<p>参考回答： 配置管理工具是指支持完成配置项标识、版本控制、变化控制、审计和状态统计等任务的工具。 自动化的配置管理工具可以帮助DevOps实现持续流水线的技术支持基础。使用CM工具，可以帮着管理与存储关于系统、软件、测试相关的版本和构建及配置信息，并提供软件和测试软件之间的可跟踪性。成功的DevOps从配置管理开始。</p>
+
+<h4 id="devops工程师的职责是什么">DevOps工程师的职责是什么?</h4>
+
+<p>参考回答：DevOps工程师与敏捷开发团队紧密合作，站在业务价值视角，拉动IT从业务需求到运营交付，确保通过高质量（JKK）的自动化测试,实现持续集成和持续交付等IT技术功能所需的环境。DevOps工程师必须经常与开发保持联系（SRE模式、丰田模式、持续交付模式、协作模式），使环境中所有需要的部分都能无缝地工作，实现高质量的增量迭代。可以扩展说说相关工具。</p>
+
+          
+<h2>微信公众号</h2>
+<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
+<img src="https://pic.downk.cc/item/5e6cce51e83c3a1e3a41b83f.png" alt="wechat-account-qrcode">
+
+  
+          
+            <div class="entry-shang text-center">
+    <p>「真诚赞赏，手留余香」</p>
+    <button class="zs show-zs btn btn-bred">赞赏</button>
+</div>
+<div class="zs-modal-bg"></div>
+<div class="zs-modal-box">
+    <div class="zs-modal-head">
+        <button type="button" class="close">×</button>
+        <span class="author"><img src="https://www.kubemaster.top/img/wechat-logo.jpeg"/>Marion</span>
+        <p class="tip"><i></i><span>请我喝杯咖啡？</span></p>
+    </div>
+    <div class="zs-modal-body">
+        <div class="zs-modal-btns">
+            <button class="btn btn-blink" data-num="2">2元</button>
+            <button class="btn btn-blink" data-num="5">5元</button>
+            <button class="btn btn-blink" data-num="10">10元</button>
+            <button class="btn btn-blink" data-num="50">50元</button>
+            <button class="btn btn-blink" data-num="100">100元</button>
+            <button class="btn btn-blink" data-num="1">任意金额</button>
+        </div>
+        <div class="zs-modal-pay">
+            <button class="btn btn-bred" id="pay-text">2元</button>
+            <p>使用<span id="pay-type">微信</span>扫描二维码完成支付</p>
+            <img src="https://www.kubemaster.top/img/wechatcn-btn.png" id="pay-image"/>
+        </div>
+    </div>
+    <div class="zs-modal-footer">
+        <span class="zs-wechat"><img src="https://www.kubemaster.top/img/wechat-btn.png"/></span>
+    </div>
+</div>
+          
+          
+            
+<div class="social-share" data-initialized="true" style="margin-bottom: 20px;margin-top:20px;">
+    <center>
+    <a href="#" class="social-share-icon icon-weibo"></a>
+    <a href="#" class="social-share-icon icon-wechat"></a>
+    <a href="#" class="social-share-icon icon-twitter"></a>
+    <a href="#" class="social-share-icon icon-linkedin"></a>
+    <a href="#" class="social-share-icon icon-facebook"></a>
+    <a href="#" class="social-share-icon icon-qq"></a>
+    <a href="#" class="social-share-icon icon-qzone"></a>
+    </center>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+          
+        </article>
+  
+        
+          
+
+<h3>相关文章</h3>
+<ul style="margin-bottom: 25px;">
+    
+    <li><a href="https://www.kubemaster.top/post/awk-advance-turtorial/">Awk权威指南</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app-part2/">TDD开发容器化的Python微服务应用(二)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/upgrading-django-20-10-tips/">更新django2.0的10条注意事项</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/tdd-develop-python-microservice-app/">TDD开发容器化的Python微服务应用(一)</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/webpack3-get-started/">webpack3入门到放肆视频教程</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/a-better-git-log/">更优雅的git log</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/python-convert-pdf-images/">利用Python 优雅的将PDF 转换成图片</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/make-https-blog/">给博客加上HTTPS</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/django-staticroot-staticfilesdirs-function/">Django 中STATIC_ROOT 与STATICFILES_DIRS的区别</a></li>
+    
+    <li><a href="https://www.kubemaster.top/post/django-decorator-usage/">Python装饰器简介</a></li>
+    
+</ul>
+
+        
+  
+        
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://www.kubemaster.top/post/k8s-ui-kubevious/" data-toggle="tooltip" data-placement="top" title="带时光机的 Kubernetes Dashboard - Kubevious">&larr; 前一篇</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://www.kubemaster.top/post/devops-base-on-jenkins/" data-toggle="tooltip" data-placement="top" title="基于 Jenkins 的 DevOps 流水线实践">后一篇 &rarr;</a>
+            </li>
+          
+        </ul>
+        
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-5376999672787220"
+            data-ad-slot="3700507799"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+  
+        
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    var gitalk = new Gitalk({
+        clientID: 'bdb76dbb2e9d0786e350',
+        clientSecret: 'b454b2a08013fd0e32013be7a63fa8fcb262b6c4',
+        repo: 'blog',
+        owner: 'cnych',
+        admin: ['cnych'],
+        labels: ['gitment'],
+        title: 'DevOps工程师面试33问',
+        createIssueManually: true,
+        id: 'devops-interview-questions-33',      
+        distractionFreeMode: true  
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+  
+      </div>
+    
+    
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          <img src="https://pic.downk.cc/item/5e6cc64de83c3a1e3a3e5ea1.jpg" alt="云原生生态圈">
+          
+              <li>
+                <a href="mailto:icnych@gmail.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://github.com/cnych" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://weibo.com/cnych" title="微博">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+              <li>
+                <a href="https://instagram.com/cnych" title="Instagram">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          
+          <li>
+            <a href="https://www.kubemaster.top/index.xml" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/">云原生生态圈</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/sitemap.xml">网站地图</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/archive/">归档</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://www.kubemaster.top/page/friend/">友链</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI2MTQzNjQ5Ng==#wechat_redirect" target="_blank">公众号历史文章</a>
+            
+          
+        </p>
+        <p class="text-center text-muted">
+          <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+          <span id="busuanzi_container_site_pv" style="display:none">
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次
+          </span>
+          &nbsp;&bull;&nbsp;
+          <span id="busuanzi_container_site_uv" style="display:none">
+            访客数<span id="busuanzi_value_site_uv"></span>人次
+          </span>
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          由 <a href="http://gohugo.io">Hugo v0.54.0</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/marionxue/marionxue.github.io">云原生生态圈</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src='https://www.kubemaster.top/js/bundle.min.76b616091e53a94d6909ba0a295da18780df89e8a2ac90870d207a478c15af42.js' integrity='sha256-drYWCR5TqU1pCboKKV2hh4DfieiirJCHDSB6R4wVr0I='></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158705628-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-158705628-1');
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script >
+$(document).ready(function() {
+  var int = setInterval(fixCount, 50);  
+  
+  var initPVCount = 584976;
+  var initUVCount = 153191;
+  function fixCount() {                   
+    if ($("#busuanzi_container_site_pv").css("display") != "none") {
+        $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + initPVCount); 
+        clearInterval(int); 
+    }
+    if ($("#busuanzi_container_site_uv").css("display") != "none") {
+      $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + initUVCount);
+      clearInterval(int); 
+    }  
+  }           
+});
+</script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+$('.carousel').slick({
+    dots: true,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    infinite: true,
+    speed: 500,
+    fade: true,
+    cssEase: 'linear',
+    centerMode: true,
+    prevArrow: '<button type="button" class="slick-prev"></button>',
+    nextArrow: '<button type="button" class="slick-next"></button>',
+});
+</script>
+
+  </body>
+</html>
+
